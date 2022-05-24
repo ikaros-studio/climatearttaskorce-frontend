@@ -17,7 +17,7 @@
             soon
           </CTag>
         </CButton>
-        <CButton justify-content="start" w="100%">
+        <CButton justify-content="start" w="100%" @click="authenticate()">
           <CImage mr="3" h="50%" :src="require('~/static/img/wallets/metamask-alternative.webp')" /> MetaMask<CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
             soon
           </CTag>
@@ -76,12 +76,25 @@ export default {
       },
       loginoptions: [
         { name: 'Phantom', imgsrc: '~/static/img/wallets/phantom.svg', link: '' }
-      ]
+      ],
+      currentUser: this.$Moralis.User.current()
     }
   },
   computed: {
     colorMode () {
       return this.$chakraColorMode()
+    }
+  },
+  methods: {
+    async authenticate () {
+      if (!this.currentUser) {
+        try {
+          this.currentUser = await this.$Moralis.authenticate()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e)
+        }
+      }
     }
   }
 }

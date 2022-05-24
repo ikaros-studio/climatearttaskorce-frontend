@@ -1,7 +1,6 @@
 // Import FontAwesome icons
 import { faArrowRightToBracket, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
 
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -44,6 +43,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~plugins/moralis.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -92,5 +92,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  env: {
+    MoralisServerUrl: process.env.MORALIS_SERVER_URL,
+    MoralisAppId: process.env.MORALIS_APP_ID
   }
 }

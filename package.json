@@ -8,7 +8,8 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint": "npm run lint:js"
+    "lint": "npm run lint:js",
+    "lint:fix": "eslint --ext --fix \".js,.vue\" --ignore-path .gitignore ."
   },
   "dependencies": {
     "@chakra-ui/nuxt": "^0.3.3",
@@ -21,7 +22,9 @@
     "d3-geo": "^3.0.1",
     "d3-geo-projection": "^4.0.0",
     "d3-scale": "^4.0.2",
+    "glob": "^7.2.0",
     "globe.gl": "^2.26.1",
+    "moralis": "^1.7.0",
     "nuxt": "^2.15.7",
     "three": "^0.140.2",
     "topojson": "^3.0.2",
