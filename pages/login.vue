@@ -6,7 +6,7 @@
     w="100%"
     align-items="center"
   >
-    <CBox align="center">
+    <CBox v-if="!currentUser" align="center">
       <CText font-weight="bold" font-size="2xl" mb="5">
         Sign in with the wallet of your choice
       </CText>
@@ -50,11 +50,24 @@
         </CListItem>
       </CList> -->
     </CBox>
+    <Cbox v-else>
+      <CText>{{ userAddress }}</CText>
+      <CText font-weight="bold" font-size="2xl">
+        Total Balance
+      </CText>
+      <CText>
+        {{ balance }} {{ currency }}
+      </CText>
+      <CButton justify-content="start" w="100%" @click="logout()">
+        Sign Out
+      </CButton>
+    </Cbox>
   </CFlex>
 </template>
 <script>
 
 import { CButton, CStack, CImage, CText, CFlex, CBox, CTag } from '@chakra-ui/vue'
+import { monitorChain, getChainID, getChainCurrency } from '../common/helpers'
 
 export default {
 
@@ -77,23 +90,57 @@ export default {
       loginoptions: [
         { name: 'Phantom', imgsrc: '~/static/img/wallets/phantom.svg', link: '' }
       ],
-      currentUser: this.$Moralis.User.current()
+      currentUser: this.$Moralis.User.current(),
+      balance: 0,
+      chainID: null,
+      currency: 'ETH'
     }
   },
   computed: {
     colorMode () {
       return this.$chakraColorMode()
+    },
+    userAddress () {
+      return this.currentUser.get('ethAddress')
     }
   },
+  async created () {
+    if (this.currentUser) {
+      await this.updateUserInfo()
+    }
+    monitorChain(async (chainID) => {
+      this.balance = await this.getBalance(chainID)
+      this.currency = getChainCurrency(chainID)
+    })
+  },
   methods: {
+    async updateUserInfo () {
+      this.chainID = await getChainID()
+      this.balance = await this.getBalance(this.chainID)
+      this.currency = getChainCurrency(this.chainID)
+    },
     async authenticate () {
-      if (!this.currentUser) {
-        try {
+      try {
+        if (!this.currentUser) {
           this.currentUser = await this.$Moralis.authenticate()
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log(e)
         }
+        this.updateUserInfo()
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e)
+      }
+    },
+    async logout () {
+      await this.$Moralis.User.logOut()
+      this.currentUser = null
+    },
+    async getBalance (chainID) {
+      try {
+        const promise = await this.$Moralis.Web3API.account.getNativeBalance({ chain: chainID })
+        return parseFloat(promise.balance / 1e18).toFixed(4)
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e)
       }
     }
   }
