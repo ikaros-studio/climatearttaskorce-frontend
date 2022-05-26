@@ -2,21 +2,25 @@
   <div class="container">
     <CThemeProvider>
       <CColorModeProvider>
-        <CBox font-family="body" as="main">
+        <CBox
+          id="main-grid"
+          font-family="body"
+          as="main"
+        >
           <CReset />
           <NavBarPublic />
-          <c-grid w="100%" template-columns="repeat(6, 1fr)" gap="0">
-            <c-grid-item col-span="4" min-h="100vh">
+          <CFlex id="bodycontainer" w="100%">
+            <CBox w="70vw">
               <Nuxt />
-            </c-grid-item>
-            <c-grid-item
-              col-span="2"
-              h="100%"
+            </CBox>
+            <CBox
+              id="description-container"
+              w="30vw"
               bg="blue.200"
             >
               <Description />
-            </c-grid-item>
-          </c-grid>
+            </CBox>
+          </CFlex>
           <Footer />
         </CBox>
       </CColorModeProvider>
@@ -29,8 +33,8 @@ import {
   CColorModeProvider,
   CReset,
   CBox,
-  CGrid,
-  CGridItem
+  CFlex
+
 } from '@chakra-ui/vue'
 import NavBarPublic from '@/components/Navigation/NavBarPublic.vue'
 import Description from '~/components/Navigation/Description.vue'
@@ -42,9 +46,8 @@ export default {
     CColorModeProvider,
     CReset,
     CBox,
+    CFlex,
     NavBarPublic,
-    CGrid,
-    CGridItem,
     Description
   },
   data () {
@@ -68,3 +71,16 @@ export default {
   }
 }
 </script>
+
+<style>
+#main-grid {
+  /* overflow:hidden; */
+  height: 100vh !important;
+}
+
+#description-container {
+  position: relative !important;
+  z-index: 0.5;
+}
+
+</style>

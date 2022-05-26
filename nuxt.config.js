@@ -1,5 +1,5 @@
 // Import FontAwesome icons
-import { faArrowRightToBracket, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightToBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -75,9 +75,15 @@ export default {
       iconSet: {
         faArrowRightToBracket,
         faAt,
-        faWallet
+        faWallet,
+        faUser
       }
+    },
+    theme: {
+      initialColorMode: 'dark',
+      useSystemColorMode: false
     }
+
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
