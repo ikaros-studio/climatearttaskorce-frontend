@@ -5,6 +5,7 @@
       v-bind="mainStyles[colorMode]"
     >
       <ArtworkArch />
+      <!-- <ArtworkGlobe /> -->
     </CBox>
   </div>
 </template>
@@ -14,7 +15,6 @@ import {
   CBox
 } from '@chakra-ui/vue'
 import ArtworkArch from '~/components/ArtworkArch.vue'
-// import ArtworkGlobe from '~/components/ArtworkGlobe.vue'
 
 export default {
   name: 'App',

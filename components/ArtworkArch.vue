@@ -1,6 +1,6 @@
 <template>
-  <CBox v-bind="mainStyles[colorMode]" font-size="4xl" font-weight="bold" h="100%">
-    <div id="canvas" />
+  <CBox v-bind="mainStyles[colorMode]" font-size="5xl" font-weight="bold" h="100%">
+    <div v-bind="mainStyles[colorMode]" id="canvas" />
   </CBox>
 </template>
 
@@ -10,8 +10,15 @@ import {
 } from '@chakra-ui/vue'
 
 // import * as topojson from 'topojson-client'
-import * as d3 from 'd3'
+// // import * as d3 from 'd3'
 // import world from '~/static/js/globe'
+
+const d3 = {
+  ...require('d3'),
+  ...require('d3-geo'),
+  ...require('d3-geo-projection'),
+  ...require('d3-scale')
+}
 
 export default {
   components: {
@@ -33,12 +40,19 @@ export default {
       }
     }
   },
+  computed: {
+    colorMode () {
+      return this.$chakraColorMode()
+    }
+  },
   mounted () {
+    // TEXT ARC
     const margin = { top: 0, right: 0, bottom: 0, left: 0 }
     const width = window.innerWidth
     const height = window.innerHeight
 
     const svg = d3.select('#canvas').append('svg')
+      .attr('xmlns', 'http://www.w3.org/2000/svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
@@ -77,31 +91,39 @@ export default {
       '01 S',
       '02 S',
       '03 M',
-      '04 T',
-      '05 W',
-      '06 T',
-      '07 F',
-      '08 S',
-      '09 S',
-      '10 M',
-      '11 T',
-      '12 W',
-      '13 T',
-      '14 F'
-
+      '04 T'
     ]
 
     svg.attr('transform', 'translate(100,' + window.innerHeight / 2 + ')')
 
-    svg.selectAll('text').data(newdata).enter()
-      .append('text')
+    svg.append('g').attr('id', 'textarc').selectAll('text')
+      .data(newdata).enter()
+      .append('a').attr('href', '/login').attr('as', 'router-link').append('text').attr('class', 'artworklink')
       .attr('transform', function (d, i) {
-        return 'translate(' + (300 * Math.cos(i * 2 * Math.PI / 50)) + ',' + (300 * Math.sin(i * 2 * Math.PI / 50)) + ')rotate(' + (i * 360 / 50) + ')'
+        return 'translate(' + (290 * Math.cos(i * 2 * Math.PI / 30)) + ',' + (290 * Math.sin(i * 2 * Math.PI / 30)) + ')rotate(' + (i * 360 / 30) + ')'
       })
       .text(function (d, i) { return 'Artwork' + i })
 
     // GLOBE
 
+    svg.append('a').attr('href', 'https://ikaros.studio')
+      .append('image')
+      .attr('xlink:href', require('~/static/img/globe_logo.png'))
+      .attr('width', 450)
+
+      .attr('height', 450)
+      .attr('transform', 'translate(-230,-230)')
+
+    const arc = document.getElementById('textarc')
+    let angle = 0
+    document.onwheel = function (e) {
+      if (e.deltaY) { // we have a wheel for vertical (common) direction
+        e.preventDefault()
+        angle += e.deltaY < 0 ? 2 : -2 // what direction?
+        arc.setAttribute('transform', 'rotate(' + angle + ')')
+        // arc.style.transform = 'rotate(' + angle + 'deg)' // do something
+      }
+    }
     // const projection = d3.geo.orthographic()
     //   .scale(200)
     //   .translate([width / 2, height / 2])
@@ -114,9 +136,9 @@ export default {
     //   .domain([0, width])
     //   .range([-180, 180])
 
-    // const φ = d3.scale.linear()
-    //   .domain([0, height])
-    //   .range([90, -90])
+    // // const φ = d3.scale.linear()
+    // //   .domain([0, height])
+    // //   .range([90, -90])
 
     // svg.append('path')
     //   .datum(topojson.feature(world, world.objects.land))
@@ -138,8 +160,12 @@ export default {
 </script>
 
 <style>
-#cafenvas {
-    animation: rotation 2s infinite linear;
+.artworklink {
+  color: red !important;
+}
+
+#textarc1 {
+    animation: rotation 100s infinite linear;
 }
 
 @keyframes rotation {

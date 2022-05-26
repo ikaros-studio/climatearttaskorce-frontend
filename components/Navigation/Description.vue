@@ -9,7 +9,7 @@
     p="5"
   >
     <CBox>
-      <CText font-size="xl" mb="3" class="catfont">
+      <CText font-size="5xl" line-height="1" mb="3" class="catfont">
         CLIMATE ART TASKFORCE
       </CText>
       <CText mb="5" font-size="sm" font-weight="200">
