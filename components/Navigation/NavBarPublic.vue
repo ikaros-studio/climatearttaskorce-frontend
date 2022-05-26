@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div
+    id="navbar"
+    class="container"
+  >
     <CBox
       w="100%"
       v-bind="mainStyles[colorMode]"
@@ -8,17 +11,26 @@
       px="4"
     >
       <!-- <ArtworkGlobe /> -->
-      <CFlex h="16" justify-content="space-between" align-items="center">
-        <CLink
-          to="/"
-          as="router-link"
+      <CFlex
+        h="16"
+        align-items="center"
+      >
+        <NuxtLink
           font-size="lg"
           class="catfont"
+          to="/"
+          w="100%"
         >
-          <CImage mr="3" max-w="300px" :src="require('~/static/img/logo_full.svg')" />
-        </CLink>
-        <CFlex spacing="3" align-items="center">
-          <CStack d="flex" align-items="center" direction="row" spacing="3">
+          CLIMATE ART TASKFORCE
+          <!-- <CImage mr="3" max-w="300px" :src="require('~/static/img/logo_full.svg')" /> -->
+        </NuxtLink>
+        <CFlex w="100%" spacing="3">
+          <CStack
+            d="flex"
+            align-items="center"
+            direction="row"
+            spacing="3"
+          >
             <CLink
               v-for="el, index in publicmenu"
               :key="index"
@@ -30,9 +42,12 @@
             >
               {{ el.name }}
             </CLink>
+          </CStack>
+          <CStack ml="auto" d="flex" align-items="center" direction="row" spacing="3">
             <CIconButton
               size="sm"
               mr="3"
+              border-radius="100%"
               border="1px"
               border-color="gray.300"
               :icon="colorMode === 'light' ? 'moon' : 'sun'"
@@ -42,25 +57,12 @@
               @click="toggleColorMode"
             />
 
-            <CMenu
-              v-if="authenticated"
-            >
-              <CMenuButton
-                size="sm"
-                mr="3"
-                border="1px"
-                border-color="gray.300"
-              >
-                Nice
-              </CMenuButton>
-              <CMenuList />
-            </CMenu>
             <CButton
-              v-else
+              v-if="!currentUser"
               to="/login"
               font-size="sm"
               as="router-link"
-              mr="3"
+              ml="auto"
               font-weight="normal"
               size="sm"
               border="1px"
@@ -69,9 +71,40 @@
               <!-- Use the `size` prop to change the icon size -->
               Log In<CIcon ml="1" name="arrow-right-to-bracket" size="24px" />
             </CButton>
+            <CMenu v-else-if="currentUser" mr="3">
+              <CMenuButton
+                size="sm"
+                border-radius="100%"
+                border="1px"
+                border-color="gray.300"
+                p="0"
+              >
+                <CIcon name="user" />
+              </CMenuButton>
+              <CMenuList>
+                <CMenuItem>Artworks</CMenuItem>
+                <CMenuItem>Upload an artwork</CMenuItem>
+                <CMenuDivider />
+                <CMenuItem @click="logout()">
+                  Log out
+                </CMenuItem>
+                <Cbox>
+                  <CText>{{ userAddress }}</CText>
+                  <CText font-weight="bold" font-size="2xl">
+                    Total Balance
+                  </CText>
+                  <CText>
+                    {{ currentUser }}
+                    {{ balance }} {{ currency }}
+                  </CText>
+                  <CButton justify-content="start" w="100%">
+                    Sign Out
+                  </CButton>
+                </Cbox>
+              </CMenuList>
+            </CMenu>
           </CStack>
         </CFlex>
-        </ctext>
       </CFlex>
     </CBox>
   </div>
@@ -83,8 +116,10 @@ import {
   CMenu,
   CMenuButton,
   CMenuList,
+  CMenuItem,
+  CMenuDivider,
   CLink,
-  CImage,
+  // CImage,
   CButton,
   CStack,
   CIconButton,
@@ -92,6 +127,7 @@ import {
   CIcon
 } from '@chakra-ui/vue'
 // import ArtworkGlobe from '~/components/ArtworkGlobe.vue'
+import { monitorAccount, monitorChain, getChainID, getChainCurrency } from '@/common/helpers'
 
 export default {
   name: 'App',
@@ -100,7 +136,9 @@ export default {
     CMenu,
     CMenuButton,
     CMenuList,
-    CImage,
+    CMenuItem,
+    CMenuDivider,
+    // CImage,
     CLink,
     CButton,
     CStack,
@@ -111,7 +149,10 @@ export default {
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data () {
     return {
-      authenticated: false,
+      currentUser: this.$Moralis.User.current(),
+      balance: 0,
+      chainID: null,
+      currency: 'ETH',
       mainStyles: {
         dark: {
           bg: 'gray.700',
@@ -137,10 +178,65 @@ export default {
     },
     toggleColorMode () {
       return this.$toggleColorMode
+    },
+    userAddress () {
+      return this.currentUser.get('ethAddress')
     }
   },
+  async created () {
+    if (this.currentUser) {
+      await this.updateUserInfo()
+    }
+    monitorChain(async (chainID) => {
+      this.balance = await this.getBalance(chainID)
+      this.currency = getChainCurrency(chainID)
+    })
+    monitorAccount(async (account) => {
+      await this.logout()
+      await this.authenticate()
+    })
+  },
   methods: {
+    async updateUserInfo () {
+      this.chainID = await getChainID()
+      this.balance = await this.getBalance(this.chainID)
+      this.currency = getChainCurrency(this.chainID)
+    },
+    async getBalance (chainID) {
+      try {
+        const promise = await this.$Moralis.Web3API.account.getNativeBalance({ chain: chainID })
+        return parseFloat(promise.balance / 1e18).toFixed(4)
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e)
+      }
+    },
+    async logout () {
+      await this.$Moralis.User.logOut()
+      this.currentUser = null
+    },
+    async authenticate () {
+      try {
+        if (!this.currentUser) {
+          this.currentUser = await this.$Moralis.authenticate()
+        }
+        this.updateUserInfo()
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e)
+      }
+    }
 
   }
+
 }
 </script>
+
+<style>
+
+#navbar {
+  position: relative;
+  z-index: 100 !important;
+}
+
+</style>

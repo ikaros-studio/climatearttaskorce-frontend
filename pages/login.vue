@@ -2,7 +2,7 @@
   <CFlex
     v-bind="mainStyles[colorMode]"
     justify-content="center"
-    h="100%"
+    h="100vh"
     w="100%"
     align-items="center"
   >
@@ -50,24 +50,11 @@
         </CListItem>
       </CList> -->
     </CBox>
-    <Cbox v-else>
-      <CText>{{ userAddress }}</CText>
-      <CText font-weight="bold" font-size="2xl">
-        Total Balance
-      </CText>
-      <CText>
-        {{ balance }} {{ currency }}
-      </CText>
-      <CButton justify-content="start" w="100%" @click="logout()">
-        Sign Out
-      </CButton>
-    </Cbox>
   </CFlex>
 </template>
 <script>
 
 import { CButton, CStack, CImage, CText, CFlex, CBox, CTag } from '@chakra-ui/vue'
-import { monitorChain, monitorAccount, getChainID, getChainCurrency } from '../common/helpers'
 
 export default {
 
@@ -87,9 +74,7 @@ export default {
           color: 'gray.900'
         }
       },
-      loginoptions: [
-        { name: 'Phantom', imgsrc: '~/static/img/wallets/phantom.svg', link: '' }
-      ],
+
       currentUser: this.$Moralis.User.current(),
       balance: 0,
       chainID: null,
@@ -105,24 +90,10 @@ export default {
     }
   },
   async created () {
-    if (this.currentUser) {
-      await this.updateUserInfo()
-    }
-    monitorChain(async (chainID) => {
-      this.balance = await this.getBalance(chainID)
-      this.currency = getChainCurrency(chainID)
-    })
-    monitorAccount(async (account) => {
-      await this.logout()
-      await this.authenticate()
-    })
+
   },
   methods: {
-    async updateUserInfo () {
-      this.chainID = await getChainID()
-      this.balance = await this.getBalance(this.chainID)
-      this.currency = getChainCurrency(this.chainID)
-    },
+
     async authenticate () {
       try {
         if (!this.currentUser) {
@@ -133,20 +104,8 @@ export default {
         // eslint-disable-next-line no-console
         console.log(e)
       }
-    },
-    async logout () {
-      await this.$Moralis.User.logOut()
-      this.currentUser = null
-    },
-    async getBalance (chainID) {
-      try {
-        const promise = await this.$Moralis.Web3API.account.getNativeBalance({ chain: chainID })
-        return parseFloat(promise.balance / 1e18).toFixed(4)
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e)
-      }
     }
+
   }
 }
 </script>
