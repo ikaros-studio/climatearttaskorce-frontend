@@ -21,3 +21,7 @@ export const getChainCurrency = (chainID) => {
 export const monitorChain = (onChange) => {
   moralis.onChainChanged(onChange)
 }
+
+export const monitorAccount = (onChange) => {
+  moralis.onAccountChanged(onChange)
+}

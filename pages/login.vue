@@ -67,7 +67,7 @@
 <script>
 
 import { CButton, CStack, CImage, CText, CFlex, CBox, CTag } from '@chakra-ui/vue'
-import { monitorChain, getChainID, getChainCurrency } from '../common/helpers'
+import { monitorChain, monitorAccount, getChainID, getChainCurrency } from '../common/helpers'
 
 export default {
 
@@ -111,6 +111,10 @@ export default {
     monitorChain(async (chainID) => {
       this.balance = await this.getBalance(chainID)
       this.currency = getChainCurrency(chainID)
+    })
+    monitorAccount(async (account) => {
+      await this.logout()
+      await this.authenticate()
     })
   },
   methods: {
