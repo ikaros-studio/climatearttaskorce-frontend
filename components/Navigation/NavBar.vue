@@ -293,6 +293,7 @@ export default {
     },
     async authenticate () {
       try {
+        window.web3 = await this.$Moralis.enableWeb3()
         if (!this.currentUser) {
           this.currentUser = await this.$Moralis.authenticate()
         }
