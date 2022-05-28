@@ -1,5 +1,7 @@
 // Import FontAwesome icons
 import { faArrowRightToBracket, faArrowRightFromBracket, faLayerGroup, faArrowUpFromBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
+import { faInstagram, faTelegram, faDiscord } from '@fortawesome/free-brands-svg-icons'
+
 import customTheme from './static/js/custom-theme'
 
 export default {
@@ -80,7 +82,10 @@ export default {
         faUser,
         faArrowUpFromBracket,
         faArrowRightFromBracket,
-        faLayerGroup
+        faLayerGroup,
+        faInstagram,
+        faTelegram,
+        faDiscord
       }
     },
     extendTheme: customTheme

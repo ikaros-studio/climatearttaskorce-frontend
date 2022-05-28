@@ -37,6 +37,7 @@ import {
 } from '@chakra-ui/vue'
 import NavBar from '@/components/Navigation/NavBar.vue'
 import Description from '~/components/Navigation/Description.vue'
+import Footer from '@/components/Navigation/Footer.vue'
 
 export default {
   name: 'App',
@@ -47,7 +48,8 @@ export default {
     CBox,
     CFlex,
     NavBar,
-    Description
+    Description,
+    Footer
   },
   data () {
     return {
