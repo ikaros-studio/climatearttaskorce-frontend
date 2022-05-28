@@ -29,9 +29,8 @@
         <CButton
           as="router-link"
           to="/login"
-          variant-color="pink"
-          border="1px"
-          border-color="white"
+          variant-color="catblue"
+          shadow="sm"
         >
           SIGN IN AND CREATE
         </CButton>
