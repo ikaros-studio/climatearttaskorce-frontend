@@ -72,6 +72,7 @@ export default {
       .attr('xmlns', 'http://www.w3.org/2000/svg')
       .attr('width', width)
       .attr('height', height)
+      .attr('id', 'artwworkarchsvg')
       .append('g')
 
     svg.attr('transform', 'translate(100,' + height / 2 + ')')
@@ -79,7 +80,10 @@ export default {
     const diameter = height / 3
     svg.append('g').attr('id', 'textarc').selectAll('text')
       .data(arcdata).enter()
-      .append('a').attr('href', '/login').attr('as', 'router-link').append('text').attr('class', 'artworklink')
+      // .attr('href', '/login').attr('as', 'router-link')
+      .append('a').append('text').attr('class', 'artworklink').on('click', function () {
+        alert('artworks will be available soon')
+      })
       // .style('fill', 'transparent')
 
       .attr('transform', function (d, i) {
@@ -165,16 +169,16 @@ export default {
 
 .artworklink {
   fill: #ffffff;
-  opacity: 0.8;
+  opacity: 0.3;
 }
 
 .artworklink:hover {
-  fill: #FF449F;
+  fill: #ffffff;
   opacity: 1;
 
 }
 
-svg {
+#artwworkarchsvg {
   position: relative !important;
   z-index: 2 !important;
 }
