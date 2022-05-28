@@ -1,5 +1,6 @@
 // Import FontAwesome icons
 import { faArrowRightToBracket, faArrowRightFromBracket, faLayerGroup, faArrowUpFromBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
+import customTheme from './static/js/custom-theme'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -82,11 +83,7 @@ export default {
         faLayerGroup
       }
     },
-    theme: {
-      initialColorMode: 'dark',
-      useSystemColorMode: false
-    }
-
+    extendTheme: customTheme
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
