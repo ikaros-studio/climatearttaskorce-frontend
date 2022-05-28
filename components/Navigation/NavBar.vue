@@ -42,9 +42,19 @@
             >
               {{ el.name }}
             </CLink>
+            <!-- <CText>
+              {{ boolean }}
+              <CButton @click="boolean = false">
+                False
+              </CButton>
+              <CButton @click="boolean = true">
+                True
+              </CButton>
+            </CText> -->
           </CStack>
           <CStack ml="auto" d="flex" align-items="center" direction="row" spacing="3">
             <CIconButton
+              v-if="!currentUser"
               size="sm"
               mr="3"
               border-radius="100%"
@@ -56,53 +66,102 @@
               } mode`"
               @click="toggleColorMode"
             />
-
             <CButton
               v-if="!currentUser"
-              to="/login"
               font-size="sm"
-              as="router-link"
               ml="auto"
               font-weight="normal"
               size="sm"
               border="1px"
               border-color="gray.300"
+              @click="open"
             >
+              <c-modal
+                id="authmodal"
+                :is-open="isOpen"
+                :on-close="close"
+                :is-centered="true"
+                z-index="modal"
+              >
+                <c-modal-content ref="content" border-radius="sm">
+                  <c-modal-close-button />
+                  <c-modal-body m="5">
+                    <CBox v-if="!currentUser" m="3" align="center">
+                      <CText font-weight="bold" font-size="2xl" mb="5">
+                        Sign in with the wallet of your choice
+                      </CText>
+                      <CStack w="80%" spacing="2">
+                        <CButton justify-content="start" w="100%">
+                          <CImage mr="3" h="50%" :src="require('~/static/img/wallets/phantom.svg')" /> Phantom
+                          <CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
+                            soon
+                          </CTag>
+                        </CButton>
+                        <CButton justify-content="start" w="100%" @click="authenticate()">
+                          <CImage mr="3" h="50%" :src="require('~/static/img/wallets/metamask-alternative.webp')" /> MetaMask<CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
+                            soon
+                          </CTag>
+                        </CButton>
+                        <CButton justify-content="start" w="100%">
+                          <CIcon mr="3" name="at" size="24px" /> Email<CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
+                            soon
+                          </CTag>
+                        </CButton>
+                      </CStack>
+                      <CText mt="4">
+                        Don't have an account yet?
+                        <CLink>
+                          Sign up.
+                        </CLink>
+                      </CText>
+                    </CBox>
+                  </c-modal-body>
+                </c-modal-content>
+                <c-modal-overlay />
+              </c-modal>
               <!-- Use the `size` prop to change the icon size -->
               Log In<CIcon ml="1" name="arrow-right-to-bracket" size="24px" />
             </CButton>
-            <CMenu v-else-if="currentUser" mr="3">
-              <CMenuButton
-                size="sm"
-                border-radius="100%"
-                border="1px"
-                border-color="gray.300"
-                p="0"
-              >
-                <CIcon name="user" />
-              </CMenuButton>
-              <CMenuList>
-                <CMenuItem>Artworks</CMenuItem>
-                <CMenuItem>Upload an artwork</CMenuItem>
-                <CMenuDivider />
-                <CMenuItem @click="logout()">
-                  Log out
-                </CMenuItem>
-                <Cbox>
-                  <CText>{{ userAddress }}</CText>
-                  <CText font-weight="bold" font-size="2xl">
-                    Total Balance
-                  </CText>
-                  <CText>
-                    {{ currentUser }}
-                    {{ balance }} {{ currency }}
-                  </CText>
-                  <CButton justify-content="start" w="100%">
-                    Sign Out
-                  </CButton>
-                </Cbox>
-              </CMenuList>
-            </CMenu>
+            <CBox v-else>
+              <CMenu mr="3">
+                <CMenuButton
+                  border-radius="100%"
+                  border="1px"
+                  border-color="gray.300"
+                  p="0"
+                >
+                  <CIcon name="user" />
+                </CMenuButton>
+                <CMenuList>
+                  <CMenuDivider />
+                  <CMenuItem py="2">
+                    <CIcon
+                      mr="2"
+                      name="layer-group"
+                    />My collection
+                  </CMenuItem>
+                  <CMenuItem py="2">
+                    <CIcon
+                      mr="2"
+                      name="arrow-up-from-bracket"
+                    />Upload an artwork
+                  </CMenuItem>
+                  <CMenuItem py="2" @click="toggleColorMode">
+                    <CIcon
+                      mr="2"
+                      :name="colorMode === 'light' ? 'moon' : 'sun'"
+                    />{{ `Switch to ${
+                      colorMode === 'light' ? 'dark' : 'light'
+                    } mode` }}
+                  </CMenuItem>
+
+                  <CMenuDivider />
+                  <CMenuItem py="2" @click="logout()">
+                    <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
+                  </CMenuItem>
+                </CMenuList>
+              </CMenu>
+            </CBox>
           </CStack>
         </CFlex>
       </CFlex>
@@ -119,12 +178,14 @@ import {
   CMenuItem,
   CMenuDivider,
   CLink,
-  // CImage,
   CButton,
   CStack,
   CIconButton,
   CFlex,
-  CIcon
+  CText,
+  CIcon,
+  CImage,
+  CTag
 } from '@chakra-ui/vue'
 // import ArtworkGlobe from '~/components/ArtworkGlobe.vue'
 import { monitorAccount, monitorChain, getChainID, getChainCurrency } from '@/common/helpers'
@@ -138,18 +199,23 @@ export default {
     CMenuList,
     CMenuItem,
     CMenuDivider,
-    // CImage,
     CLink,
     CButton,
+    CImage,
     CStack,
+    CText,
     CIconButton,
     CFlex,
-    CIcon
+    CIcon,
+    CTag
+
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data () {
     return {
-      currentUser: this.$Moralis.User.current(),
+      isOpen: false,
+      boolean: false,
+      currentUser: null,
       balance: 0,
       chainID: null,
       currency: 'ETH',
@@ -168,6 +234,9 @@ export default {
         { name: 'Artworks', to: '/' }
       ]
     }
+  },
+  async fetch () {
+    this.currentUser = await this.$Moralis.User.current()
   },
   computed: {
     colorMode () {
@@ -197,6 +266,12 @@ export default {
     })
   },
   methods: {
+    open () {
+      this.isOpen = true
+    },
+    close () {
+      this.isOpen = false
+    },
     async updateUserInfo () {
       this.chainID = await getChainID()
       this.balance = await this.getBalance(this.chainID)
@@ -212,8 +287,9 @@ export default {
       }
     },
     async logout () {
-      await this.$Moralis.User.logOut()
-      this.currentUser = null
+      await this.$Moralis.User.logOut().then(() => {
+        this.currentUser = null
+      })
     },
     async authenticate () {
       try {
@@ -221,6 +297,7 @@ export default {
           this.currentUser = await this.$Moralis.authenticate()
         }
         this.updateUserInfo()
+        this.isOpen = false
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)
@@ -233,10 +310,8 @@ export default {
 </script>
 
 <style>
-
-#navbar {
-  position: relative;
-  z-index: 100 !important;
+span#modal-portal-authmodal {
+    position: relative !important;
+    z-index: 200;
 }
-
 </style>

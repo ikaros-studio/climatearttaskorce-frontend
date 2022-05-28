@@ -8,15 +8,14 @@
           as="main"
         >
           <CReset />
-          <NavBarPublic />
+          <NavBar />
           <CFlex id="bodycontainer" w="100%">
-            <CBox w="70vw">
+            <CBox min-w="70vw">
               <Nuxt />
             </CBox>
             <CBox
               id="description-container"
               w="30vw"
-              bg="blue.200"
             >
               <Description />
             </CBox>
@@ -36,7 +35,7 @@ import {
   CFlex
 
 } from '@chakra-ui/vue'
-import NavBarPublic from '@/components/Navigation/NavBarPublic.vue'
+import NavBar from '@/components/Navigation/NavBar.vue'
 import Description from '~/components/Navigation/Description.vue'
 
 export default {
@@ -47,11 +46,13 @@ export default {
     CReset,
     CBox,
     CFlex,
-    NavBarPublic,
+    NavBar,
     Description
   },
   data () {
     return {
+      // TODO: Add event listener
+      hidedescription: true,
       mainStyles: {
         dark: {
           bg: 'gray.700',
@@ -67,6 +68,16 @@ export default {
   computed: {
     colorMode () {
       return this.$chakraColorMode()
+    }
+  },
+  created () {
+    this.$nuxt.$on('hidedescription', () => {
+      this.hidedescription = true
+    })
+  },
+  methods: {
+    getDescription (value) {
+      this.description = value
     }
   }
 }

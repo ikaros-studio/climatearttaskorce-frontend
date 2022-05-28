@@ -169,30 +169,29 @@ export default {
 
 .artworklink:hover {
   fill: #FF449F;
+
 }
 svg #cta-button:hover text {
   fill: #fff;
 }
 
+svg {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
 #textarc   {
   position: relative !important;
-  z-index: 1;
+  z-index: 2 !important;
   animation: rotation 200s infinite linear;
 }
 
-#canvas {
-   position: relative !important;
-  z-index: 1;
-
-}
-
-#globeViz {
+#globeViz{
   position: absolute !important;
   z-index: 0;
   top: 0;
   width: 70vw !important;
   /* margin-top: 100px; */
-
 }
 
 @keyframes rotation {

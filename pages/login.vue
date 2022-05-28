@@ -29,7 +29,8 @@
         </CButton>
       </CStack>
       <CText mt="4">
-        Don't have an account yet? <CLink to="/signup">
+        Don't have an account yet?
+        <CLink>
           Sign up.
         </CLink>
       </CText>
@@ -89,17 +90,20 @@ export default {
       return this.currentUser.get('ethAddress')
     }
   },
-  async created () {
-
+  created () {
+    this.emitHide()
   },
   methods: {
-
+    emitHide () {
+      this.$emit('hidedescription')
+    },
     async authenticate () {
       try {
         if (!this.currentUser) {
           this.currentUser = await this.$Moralis.authenticate()
         }
-        this.updateUserInfo()
+        // this.updateUserInfo()
+        this.$router.push({ name: '' })
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)

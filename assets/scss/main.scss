@@ -5,6 +5,10 @@
     font-family: 'Work Sans' !important;
 }
 
+.z-100 {
+    z-index: 1000 !important;
+}
+
 body,
 button {
     font-family: 'IBM Plex Sans' !important;
@@ -20,6 +24,7 @@ a {
     background-size: 400% 400%;
     animation: gradient 100s ease infinite;
     height: 100vh;
+
 }
 
 @keyframes gradient {

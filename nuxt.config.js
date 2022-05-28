@@ -1,5 +1,5 @@
 // Import FontAwesome icons
-import { faArrowRightToBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightToBracket, faArrowRightFromBracket, faLayerGroup, faArrowUpFromBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -76,7 +76,10 @@ export default {
         faArrowRightToBracket,
         faAt,
         faWallet,
-        faUser
+        faUser,
+        faArrowUpFromBracket,
+        faArrowRightFromBracket,
+        faLayerGroup
       }
     },
     theme: {
