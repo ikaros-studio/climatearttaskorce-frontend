@@ -262,7 +262,7 @@ export default {
     })
     monitorAccount(async (account) => {
       await this.logout()
-      await this.authenticate()
+      // await this.authenticate()
     })
   },
   methods: {
@@ -286,8 +286,8 @@ export default {
         console.log(e)
       }
     },
-    async logout () {
-      await this.$Moralis.User.logOut().then(() => {
+    logout () {
+      this.$Moralis.User.logOut().then(() => {
         this.currentUser = null
       })
     },
