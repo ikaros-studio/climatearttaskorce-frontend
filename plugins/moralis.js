@@ -5,7 +5,6 @@ Moralis.start({
   appId: process.env.MoralisAppId
 })
 
-export default async (_, inject) => {
-  window.web3 = await Moralis.enableWeb3()
+export default (_, inject) => {
   inject('Moralis', Moralis)
 }
