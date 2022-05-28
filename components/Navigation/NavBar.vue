@@ -134,7 +134,7 @@
                 </CMenuButton>
                 <CMenuList>
                   <CMenuDivider />
-                  <CMenuItem py="2">
+                  <CMenuItem as="router-link" to="collection" py="2">
                     <CIcon
                       mr="2"
                       name="layer-group"
@@ -230,7 +230,7 @@ export default {
         }
       },
       publicmenu: [
-        { name: 'About', to: '/login' }, { name: 'Publications', to: '/' },
+        { name: 'About', to: '' }, { name: 'Publications', to: '/' },
         { name: 'Artworks', to: '/' }
       ]
     }

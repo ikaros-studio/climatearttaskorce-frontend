@@ -165,14 +165,13 @@ export default {
 
 .artworklink {
   fill: #ffffff;
+  opacity: 0.8;
 }
 
 .artworklink:hover {
   fill: #FF449F;
+  opacity: 1;
 
-}
-svg #cta-button:hover text {
-  fill: #fff;
 }
 
 svg {
