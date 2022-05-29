@@ -30,9 +30,9 @@
           <CStack spacing="4">
             <CFormControl v-for="el, index in uploadform" :key="index">
               <CFormLabel>{{ el.label }}</CFormLabel>
-              <CInput v-if="el.type != 'select'" :type="el.type" :placeholder="el.placeholder" />
-              <CSelect v-else id="country" placeholder="Select category">
-                <option v-for="opt in el.options" :key="opt" value="option1">
+              <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
+              <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
+                <option v-for="opt in el.options" :key="opt" :value="opt">
                   {{ opt }}
                 </option>
               </CSelect>
@@ -42,7 +42,7 @@
           </CStack>
         </c-modal-body>
         <c-modal-footer>
-          <c-button variant-color="blue" mr="3">
+          <c-button variant-color="blue" mr="3" @click="onSubmit">
             Upload
           </c-button>
           <c-button @click="close">
@@ -74,6 +74,8 @@ import {
   CStack
 } from '@chakra-ui/vue'
 
+import { uploadToIPFS } from '../../common/helpers'
+
 export default {
   components: {
     CButton,
@@ -101,15 +103,22 @@ export default {
   data () {
     return {
       isOpen: false,
+      art_file: null,
+      work_type: null,
+      art_name: null,
+      artist_name: null,
+      description: null,
       uploadform: [
         // TODO: CUSTOM STYLE FOR FILE
         {
+          id: 'art_file',
           name: 'Upload your artwork',
           label: 'Upload your artwork',
           type: 'file',
           description: 'Please upload a file containing your work.'
         },
         {
+          id: 'work_type',
           name: 'Type',
           label: 'Type of work',
           type: 'select',
@@ -117,18 +126,21 @@ export default {
           description: 'Please indicate the category youre work can be seen as'
         },
         {
+          id: 'art_name',
           name: 'Name',
           label: 'Artwork name',
           type: 'text',
           description: 'Please indicate the artworks name'
         },
         {
+          id: 'artist_name',
           name: 'Name',
           label: 'Artist',
           type: 'text',
           description: 'Please indicate the name of the Artist(s)'
         },
         {
+          id: 'description',
           name: 'Name',
           label: 'Description',
           type: 'text',
@@ -143,6 +155,26 @@ export default {
     },
     close () {
       this.isOpen = false
+    },
+    onChange (event) {
+      const id = event.target.id
+      if (event.target.type === 'file') {
+        this[id] = event.target.files[0]
+      } else {
+        this[id] = event.target.value
+      }
+    },
+    async onSubmit () {
+      const artFileURL = await uploadToIPFS(this.art_file)
+      const metaData = {
+        name: this.art_name,
+        description: this.description,
+        artist_name: this.artist_name,
+        artwork: artFileURL,
+        work_type: this.work_type
+      }
+      const metadataURL = await uploadToIPFS(metaData, true)
+      console.log(metadataURL)
     }
   }
 }

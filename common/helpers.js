@@ -25,3 +25,9 @@ export const monitorChain = (onChange) => {
 export const monitorAccount = (onChange) => {
   moralis.onAccountChanged(onChange)
 }
+
+export const uploadToIPFS = async (file, isJSON = false) => {
+  const moralisFile = isJSON ? new moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) }) : new moralis.File(file.name, file)
+  await moralisFile.saveIPFS()
+  return moralisFile.ipfs()
+}
