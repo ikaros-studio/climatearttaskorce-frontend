@@ -74,7 +74,7 @@ import {
   CStack
 } from '@chakra-ui/vue'
 
-import { uploadToIPFS } from '../../common/helpers'
+import { uploadToIPFS, mintToken } from '../../common/helpers'
 
 export default {
   components: {
@@ -175,6 +175,7 @@ export default {
       }
       const metadataURL = await uploadToIPFS(metaData, true)
       console.log(metadataURL)
+      console.log(await mintToken(metadataURL))
     }
   }
 }
