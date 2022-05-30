@@ -1,5 +1,5 @@
 // Import FontAwesome icons
-import { faArrowRightToBracket, faArrowRightFromBracket, faLayerGroup, faArrowUpFromBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightToBracket, faCode, faPhotoFilm, faArrowsRotate, faArrowRightFromBracket, faLayerGroup, faArrowUpFromBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
 import { faInstagram, faTelegram, faDiscord } from '@fortawesome/free-brands-svg-icons'
 
 import customTheme from './static/js/custom-theme'
@@ -46,7 +46,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~plugins/moralis.js'
+    '~plugins/moralis.js',
+    { src: '~plugins/vue-append.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -60,6 +61,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'simple-code-editor/nuxt',
     // https://go.nuxtjs.dev/chakra
     '@chakra-ui/nuxt',
     // https://go.nuxtjs.dev/emotion
@@ -84,8 +86,11 @@ export default {
         faArrowRightFromBracket,
         faLayerGroup,
         faInstagram,
+        faArrowsRotate,
         faTelegram,
-        faDiscord
+        faDiscord,
+        faCode,
+        faPhotoFilm
       }
     },
     extendTheme: customTheme

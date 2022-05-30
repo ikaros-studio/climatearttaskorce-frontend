@@ -3,12 +3,23 @@
     v-bind="mainStyles[colorMode]"
     min-h="100vh"
   >
+    <CText p="5" font-weight="bold" font-size="2xl">
+      Your collection
+    </CText>
     <CBox
       v-if="artworks.length < 1"
       p="5"
       h="100%"
       w="100%"
     >
+      <CAlert
+        font-size="sm"
+        border-radius="sm"
+        status="info"
+      >
+        <CAlertIcon />
+        You don't have any artworks in your collection yet. Create one or explore existing ones.
+      </CAlert>
       <UploadArtwork :cta="'Upload your first artwork'" />
     </CBox>
     <CGrid v-else p="5" template-columns="repeat(3, 4fr)" gap="4">
@@ -40,15 +51,21 @@
 <script>
 import {
   CGrid,
-  CGridItem
+  CGridItem,
+  CAlert,
+  CAlertIcon,
+  CText
 } from '@chakra-ui/vue'
 import UploadArtwork from '~/components/Collection/UploadArtwork.vue'
 
 export default {
   components: {
     CGrid,
+    CAlert,
+    CAlertIcon,
     CGridItem,
-    UploadArtwork
+    UploadArtwork,
+    CText
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data () {

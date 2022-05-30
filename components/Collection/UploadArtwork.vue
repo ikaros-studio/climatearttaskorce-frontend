@@ -19,7 +19,7 @@
     <c-modal
       :is-open="isOpen"
       :on-close="close"
-      size="xl"
+      size="3xl"
     >
       <c-modal-content
         ref="content"
@@ -28,19 +28,53 @@
         <c-modal-header>{{ cta }}</c-modal-header>
         <c-modal-close-button />
         <c-modal-body>
-          <CStack spacing="4">
-            <CFormControl v-for="el, index in uploadform" :key="index">
-              <CFormLabel>{{ el.label }}</CFormLabel>
-              <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
-              <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
-                <option v-for="opt in el.options" :key="opt" :value="opt">
-                  {{ opt }}
-                </option>
-              </CSelect>
-              <CFormHelperText>{{ el.description }}</CFormHelperText>
-              <CFormErrorMessage />
-            </CFormControl>
-          </CStack>
+          <CTabs variant="soft-rounded">
+            <CTabList>
+              <CTab mr="2"><CIcon mr="1" name="photo-film" /> Media file</CTab>
+              <CTab><CIcon mr="1" name="code" />Code</CTab>
+            </CTabList>
+            <CDivider my="5" />
+            <CTabPanels>
+              <CTabPanel>
+                <CStack spacing="4">
+                  <CFormControl v-for="el, index in uploadform" :key="index">
+                    <CFormLabel>{{ el.label }}</CFormLabel>
+                    <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
+                    <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
+                      <option v-for="opt in el.options" :key="opt" :value="opt">
+                        {{ opt }}
+                      </option>
+                    </CSelect>
+                    <CFormHelperText>{{ el.description }}</CFormHelperText>
+                    <CFormErrorMessage />
+                  </CFormControl>
+                </CStack>
+              </CTabPanel>
+              <CTabPanel>
+                <CAlert font-size="sm" border-radius="sm" status="info">
+                  <CAlertIcon />
+                  When uploading code-based artworks make sure to include every code in one HTML file
+                </CAlert>                <!-- <span v-html-js="{html: rawHtml, script:'jquery'}" /> -->
+                <HtmlOutput
+                  :key="compcount"
+                  :passed-html="passedHtml"
+                />
+                <CButton mb="3" w="100%" @click="compcount++, passedHtml = rawHtml">
+                  <CIcon mr="1" name="arrows-rotate" />Compile
+                </CButton>
+                <client-only>
+                  <CodeEditor
+                    v-model="rawHtml"
+                    :display_language="false"
+                    height="300px"
+                    width="100%"
+                    class="github_dark"
+                    :value="rawHtml"
+                  />
+                </client-only>
+              </CTabPanel>
+            </CTabPanels>
+          </CTabs>
         </c-modal-body>
         <c-modal-footer>
           <c-button variant-color="blue" mr="3" @click="onSubmit">
@@ -57,8 +91,13 @@
 </template>
 
 <script>
-
 import {
+  CAlert,
+  CAlertIcon,
+  CTabs,
+  CTab,
+  CTabPanels,
+  CTabPanel,
   CButton,
   CModal,
   CModalOverlay,
@@ -72,17 +111,26 @@ import {
   CFormErrorMessage,
   CFormHelperText,
   CModalCloseButton,
-  CStack
+  CStack,
+  CDivider,
+  CIcon
 } from '@chakra-ui/vue'
 
 import { uploadToIPFS, mintToken } from '../../common/helpers'
 import Spinner from '../Loggers/Spinner.vue'
+import HtmlOutput from './HtmlOutput.vue'
 
 export default {
   components: {
+    CAlert,
+    CAlertIcon,
     CButton,
     CInput,
     CModal,
+    CTabs,
+    CTab,
+    CTabPanels,
+    CTabPanel,
     CModalOverlay,
     CModalContent,
     CModalHeader,
@@ -94,7 +142,10 @@ export default {
     CModalBody,
     CModalCloseButton,
     CStack,
-    Spinner
+    Spinner,
+    CDivider,
+    HtmlOutput,
+    CIcon
   },
   props: {
     cta: {
@@ -105,6 +156,9 @@ export default {
   },
   data () {
     return {
+      compcount: 0,
+      rawHtml: '<p style="margin: 10px">Code something!</p>',
+      passedHtml: '<p style="margin: 10px">Code something!</p>',
       isOpen: false,
       art_file: null,
       work_type: null,
@@ -152,6 +206,9 @@ export default {
         }
       ]
     }
+  },
+  mounted () {
+
   },
   methods: {
     open () {
