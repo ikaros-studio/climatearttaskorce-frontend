@@ -1,5 +1,6 @@
 <template>
   <CBox w="100%">
+    <Spinner :loading="loading" />
     <CButton
       border="1px"
       border-color="gray.300"
@@ -75,6 +76,7 @@ import {
 } from '@chakra-ui/vue'
 
 import { uploadToIPFS, mintToken } from '../../common/helpers'
+import Spinner from '../Loggers/Spinner.vue'
 
 export default {
   components: {
@@ -91,7 +93,8 @@ export default {
     CFormHelperText,
     CModalBody,
     CModalCloseButton,
-    CStack
+    CStack,
+    Spinner
   },
   props: {
     cta: {
@@ -108,6 +111,7 @@ export default {
       art_name: null,
       artist_name: null,
       description: null,
+      loading: false,
       uploadform: [
         // TODO: CUSTOM STYLE FOR FILE
         {
@@ -165,17 +169,24 @@ export default {
       }
     },
     async onSubmit () {
-      const artFileURL = await uploadToIPFS(this.art_file)
-      const metaData = {
-        name: this.art_name,
-        description: this.description,
-        artist_name: this.artist_name,
-        artwork: artFileURL,
-        work_type: this.work_type
+      try {
+        this.isOpen = false
+        this.loading = true
+        const artFileURL = await uploadToIPFS(this.art_file)
+        const metaData = {
+          name: this.art_name,
+          description: this.description,
+          artist_name: this.artist_name,
+          artwork: artFileURL,
+          work_type: this.work_type
+        }
+        const metadataURL = await uploadToIPFS(metaData, true)
+        console.log(await mintToken(metadataURL))
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
       }
-      const metadataURL = await uploadToIPFS(metaData, true)
-      console.log(metadataURL)
-      console.log(await mintToken(metadataURL))
     }
   }
 }
