@@ -91,18 +91,16 @@
                     Sign in with the wallet of your choice
                   </CText>
                   <CStack w="80%" spacing="2">
-                    <CButton justify-content="start" w="100%">
+                    <CButton justify-content="start" w="100%" @click="authenticate()">
+                      <CImage mr="3" h="50%" :src="require('~/static/img/wallets/metamask-alternative.webp')" /> MetaMask
+                    </CButton>
+                    <CButton disabled justify-content="start" w="100%">
                       <CImage mr="3" h="50%" :src="require('~/static/img/wallets/phantom.svg')" /> Phantom
                       <CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
                         soon
                       </CTag>
                     </CButton>
-                    <CButton justify-content="start" w="100%" @click="authenticate()">
-                      <CImage mr="3" h="50%" :src="require('~/static/img/wallets/metamask-alternative.webp')" /> MetaMask<CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
-                        soon
-                      </CTag>
-                    </CButton>
-                    <CButton justify-content="start" w="100%">
+                    <CButton disabled justify-content="start" w="100%">
                       <CIcon mr="3" name="at" size="24px" /> Email<CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
                         soon
                       </CTag>
