@@ -53,9 +53,10 @@
                 </CStack>
               </CTabPanel>
               <CTabPanel>
-                <CAlert font-size="sm" border-radius="sm" status="info">
+                <CAlert v-if="showInfo" font-size="sm" border-radius="sm" status="info">
                   <CAlertIcon />
-                  When uploading code-based artworks make sure to include every code in one HTML file
+                  When uploading code-based artworks make sure to include every code in one HTML file. For extensive files, we recommend editiing in your favourite code editor and inserting the code in here once ready.
+                  <CCloseButton position="absolute" right="8px" top="8px" @click="showInfo = false" />
                 </CAlert>                <!-- <span v-html-js="{html: rawHtml, script:'jquery'}" /> -->
                 <HtmlOutput
                   :key="compcount"
@@ -94,6 +95,7 @@
 
 <script>
 import {
+  CCloseButton,
   CAlert,
   CAlertIcon,
   CTabs,
@@ -124,6 +126,7 @@ import HtmlOutput from './HtmlOutput.vue'
 
 export default {
   components: {
+    CCloseButton,
     CAlert,
     CAlertIcon,
     CButton,
@@ -158,6 +161,7 @@ export default {
   },
   data () {
     return {
+      showInfo: true,
       compcount: 0,
       rawHtml: '<p style="margin: 10px">Code something!</p>',
       passedHtml: '<p style="margin: 10px">Code something!</p>',
