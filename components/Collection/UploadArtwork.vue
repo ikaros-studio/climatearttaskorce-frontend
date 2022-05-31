@@ -30,7 +30,9 @@
         <c-modal-body>
           <CTabs variant="soft-rounded">
             <CTabList>
-              <CTab mr="2"><CIcon mr="1" name="photo-film" /> Media file</CTab>
+              <CTab mr="2">
+                <CIcon mr="1" name="photo-film" /> Media file
+              </CTab>
               <CTab><CIcon mr="1" name="code" />Code</CTab>
             </CTabList>
             <CDivider my="5" />
