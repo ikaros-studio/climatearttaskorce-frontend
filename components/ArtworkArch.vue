@@ -56,6 +56,7 @@ export default {
     const width = window.innerWidth * 0.7
     const height = window.innerHeight
 
+    // TEXT ARC
     // Fill up artworks if length < 40
     let arcdata = []
     if (arcdata.length < 40) {
@@ -91,36 +92,9 @@ export default {
         return 'translate(' + (diameter * Math.cos(i * 2 * Math.PI / arcdata.length)) + ',' + (diameter * Math.sin(i * 2 * Math.PI / arcdata.length)) + ')rotate(' + (i * 360 / arcdata.length) + ')'
       })
       .text(function (d, i) { return d.title })
-
-    // const arc = document.getElementById('textarc')
-    // let angle = 0
-    // setInterval(function () {
-    //   angle = angle + 0.05
-    //   arc.setAttribute('transform', 'rotate(' + angle + ')')
-    // }, 100)
-    // document.onwheel = function (e) {
-    //   if (e.deltaY) { // we have a wheel for vertical (common) direction
-    //     e.preventDefault()
-    //     angle += e.deltaY < 0 ? 2 : -2 // what direction?
-    //     arc.setAttribute('transform', 'rotate(' + angle + ')')
-    //     // arc.style.transform = 'rotate(' + angle + 'deg)' // do something
-    //   }
-    // }
-
     // GLOBE
-
     this.globeElem = document.getElementById(this.globeVisId)
-    // Gen random data
-
     this.renderGlobe(width, height)
-
-    // svg.append('a').attr('href', 'https://ikaros.studio')
-    //   .append('image')
-    //   .attr('xlink:href', require('~/static/img/globe_logo.png'))
-    //   .attr('width', 450)
-
-    //   .attr('height', 450)
-    //   .attr('transform', 'translate(-230,-230)')
   },
   methods: {
     repeat (func, times) {

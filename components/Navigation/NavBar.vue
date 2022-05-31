@@ -16,15 +16,29 @@
     >
       <!-- <ArtworkGlobe /> -->
       <CFlex>
-        <NuxtLink
-          font-size="lg"
-          class="catfont"
+        <CLink
+          as="router-link"
           to="/"
+          d="flex"
+          align-items="center"
         >
-          CLIMATE ART TASKFORCE
-        <!-- <CImage mr="3" max-w="300px" :src="require('~/static/img/logo_full.svg')" /> -->
-        </NuxtLink>
+          <CImage
+            v-if="colorMode == 'light'"
+            height="2.5rem"
+            my="auto"
+            mr="3"
+            :src="require('~/static/img/logos/layer_logo_light.svg')"
+          />
+          <CImage
+            v-else-if="colorMode == 'dark'"
+            my="auto"
+            height="2.5rem"
+            mr="3"
+            :src="require('~/static/img/logos/layer_logo_dark.svg')"
+          />
+        </CLink>
         <CStack
+
           ml="5"
           d="flex"
           align-items="center"
