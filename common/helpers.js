@@ -43,7 +43,8 @@ export const uploadToIPFS = async (file, isJSON = false) => {
 
 export const mintToken = async (uri) => {
   try {
-    const provider = await moralis.enableWeb3()
+    const wallet = localStorage.getItem('wallet')
+    const provider = await moralis.enableWeb3({ connector: getConnectorFromWallet(wallet) })
     const nft = new ethers.Contract(NFTAddress, NFTAbi, provider.getSigner())
     return await (await nft.mint(uri)).wait()
   } catch (e) {

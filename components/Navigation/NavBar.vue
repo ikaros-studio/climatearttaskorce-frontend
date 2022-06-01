@@ -297,6 +297,9 @@ export default {
     logout () {
       this.$Moralis.User.logOut().then(() => {
         this.currentUser = null
+        if (process.client) {
+          localStorage.removeItem('wallet')
+        }
       })
     },
     async authenticate (wallet) {
@@ -304,6 +307,9 @@ export default {
         if (!this.currentUser) {
           const connector = getConnectorFromWallet(wallet)
           this.currentUser = await this.$Moralis.authenticate({ connector })
+          if (process.client) {
+            localStorage.setItem('wallet', wallet)
+          }
         }
         this.updateUserInfo()
         this.isOpen = false
