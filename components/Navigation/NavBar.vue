@@ -105,14 +105,11 @@
                     Sign in with the wallet of your choice
                   </CText>
                   <CStack w="80%" spacing="2">
-                    <CButton justify-content="start" w="100%" @click="authenticate()">
+                    <CButton justify-content="start" w="100%" @click="() => authenticate('metamask')">
                       <CImage mr="3" h="50%" :src="require('~/static/img/wallets/metamask-alternative.webp')" /> MetaMask
                     </CButton>
-                    <CButton disabled justify-content="start" w="100%">
-                      <CImage mr="3" h="50%" :src="require('~/static/img/wallets/phantom.svg')" /> Phantom
-                      <CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
-                        soon
-                      </CTag>
+                    <CButton justify-content="start" w="100%" @click="() => authenticate('coinbase')">
+                      <CImage mr="3" h="50%" :src="require('~/static/img/wallets/Coinbase.svg')" /> CoinBase
                     </CButton>
                     <CButton disabled justify-content="start" w="100%">
                       <CIcon mr="3" name="at" size="24px" /> Email<CTag variant-color="blue" size="sm" bg="gray.500" ml="auto">
@@ -197,7 +194,7 @@ import {
   CTag
 } from '@chakra-ui/vue'
 // import ArtworkGlobe from '~/components/ArtworkGlobe.vue'
-import { monitorAccount, monitorChain, getChainID, getChainCurrency } from '@/common/helpers'
+import { monitorAccount, monitorChain, getChainID, getChainCurrency, getConnectorFromType } from '@/common/helpers'
 
 export default {
   name: 'App',
@@ -302,11 +299,12 @@ export default {
         this.currentUser = null
       })
     },
-    async authenticate () {
+    async authenticate (type) {
       try {
         window.web3 = await this.$Moralis.enableWeb3()
         if (!this.currentUser) {
-          this.currentUser = await this.$Moralis.authenticate()
+          const connector = getConnectorFromType(type)
+          this.currentUser = await this.$Moralis.authenticate({ connector })
         }
         this.updateUserInfo()
         this.isOpen = false
