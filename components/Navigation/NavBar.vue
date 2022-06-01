@@ -194,7 +194,7 @@ import {
   CTag
 } from '@chakra-ui/vue'
 // import ArtworkGlobe from '~/components/ArtworkGlobe.vue'
-import { monitorAccount, monitorChain, getChainID, getChainCurrency, getConnectorFromWallet, getDownloadUrlFromWallet, NoWalletError, NoEthereumProviderError } from '@/common/helpers'
+import { monitorAccount, monitorChain, getChainID, getChainCurrency, getConnectorFromWallet, getDownloadUrlFromWallet } from '@/common/helpers'
 
 export default {
   name: 'App',
@@ -301,7 +301,6 @@ export default {
     },
     async authenticate (wallet) {
       try {
-        window.web3 = await this.$Moralis.enableWeb3()
         if (!this.currentUser) {
           const connector = getConnectorFromWallet(wallet)
           this.currentUser = await this.$Moralis.authenticate({ connector })
@@ -311,7 +310,7 @@ export default {
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)
-        if (e instanceof NoWalletError || e instanceof NoEthereumProviderError) {
+        if (e.name === 'NoWalletError' || e.name === 'NoEthereumProviderError') {
           window.open(getDownloadUrlFromWallet(wallet), '_blank').focus()
         }
       }

@@ -57,17 +57,19 @@ function fromDecimalToHex (number) {
   return `0x${number.toString(16)}`
 }
 
-export class NoEthereumProviderError extends Error {
+class NoEthereumProviderError extends Error {
   constructor () {
     super()
     this.message = 'Non ethereum enabled browser'
+    this.name = 'NoEthereumProviderError'
   }
 }
 
-export class NoWalletError extends Error {
+class NoWalletError extends Error {
   constructor (wallet) {
     super()
     this.message = `${wallet} wallet not found. Please install ${wallet}`
+    this.name = 'NoWalletError'
   }
 }
 
