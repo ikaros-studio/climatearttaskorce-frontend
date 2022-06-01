@@ -1,7 +1,7 @@
 import moralis from 'moralis'
 import { abi as NFTAbi } from '../contractsData/NFT.json'
 import { address as NFTAddress } from '../contractsData/NFT-address.json'
-import { NETWORKS } from './constants'
+import { NETWORKS, WALLETS } from './constants'
 
 const ethers = moralis.web3Library
 
@@ -57,10 +57,17 @@ function fromDecimalToHex (number) {
   return `0x${number.toString(16)}`
 }
 
-class NoEthereumProviderError extends Error {
+export class NoEthereumProviderError extends Error {
   constructor () {
     super()
     this.message = 'Non ethereum enabled browser'
+  }
+}
+
+export class NoWalletError extends Error {
+  constructor (wallet) {
+    super()
+    this.message = `${wallet} wallet not found. Please install ${wallet}`
   }
 }
 
@@ -88,6 +95,8 @@ class MetamaskConnector extends moralis.AbstractWeb3Connector {
         if (p.isMetaMask) { provider = p }
       })
     }
+
+    if (!provider.isMetaMask) { throw new NoWalletError('Metamask') }
 
     const [accounts, chainId] = await Promise.all([
       provider.request({
@@ -163,6 +172,8 @@ class CoinBaseConnector extends moralis.AbstractWeb3Connector {
       })
     }
 
+    if (!provider.isCoinbaseWallet) { throw new NoWalletError('CoinBase') }
+
     const [accounts, chainId] = await Promise.all([
       provider.request({
         method: 'eth_requestAccounts'
@@ -217,9 +228,13 @@ class CoinBaseConnector extends moralis.AbstractWeb3Connector {
   }
 }
 
-export const getConnectorFromType = (type) => {
-  switch (type) {
+export const getConnectorFromWallet = (wallet) => {
+  switch (wallet) {
     case 'metamask': return MetamaskConnector
     case 'coinbase': return CoinBaseConnector
   }
+}
+
+export const getDownloadUrlFromWallet = (wallet) => {
+  return WALLETS[wallet].URL
 }
