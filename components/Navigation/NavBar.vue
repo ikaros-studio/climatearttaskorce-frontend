@@ -221,7 +221,7 @@ export default {
     return {
       isOpen: false,
       boolean: false,
-      currentUser: null,
+      currentUser: this.$Moralis.User.current(),
       balance: 0,
       chainID: null,
       currency: 'ETH',
@@ -241,9 +241,6 @@ export default {
       ]
     }
   },
-  async fetch () {
-    this.currentUser = await this.$Moralis.User.current()
-  },
   computed: {
     colorMode () {
       return this.$chakraColorMode()
@@ -262,6 +259,8 @@ export default {
     // Set intial color mode to dark
     this.$toggleColorMode()
     if (this.currentUser) {
+      const wallet = localStorage.getItem('wallet')
+      await this.$Moralis.enableWeb3({ connector: getConnectorFromWallet(wallet) })
       await this.updateUserInfo()
     }
     monitorChain(async (chainID) => {
