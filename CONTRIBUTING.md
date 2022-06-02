@@ -53,7 +53,7 @@ with the following naming convention:
 ```
 <initials>-<feature name>
     |            |
-    |            └─⫸ Name of the feature
+    |            └─⫸ Name of the feature underscore separated in lowercase
     |
     └─⫸ Initials of user's name for ex. first letter of name
 ```
@@ -61,7 +61,7 @@ with the following naming convention:
 Here is an example of a branch name:
 
 ```
-g-login : g from gaurav, and login is the feature I want to work on
+g-login_through_coinbase : g are my initials, and login through coinbase is the feature I want to work on
 ```
 
 ## Thanks!
