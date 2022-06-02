@@ -22,5 +22,31 @@ For detailed explanation on how things work, check out the [documentation](https
 
 Download [Metamask](https://metamask.io/download/) or [Coinbase](https://www.coinbase.com/wallet) wallet in order to Login and mint NFTs
 
+## Environment
+Rename `.env.example` to `.env` in the main folder and provide your `appId` and `serverUrl` from Moralis ([How to start Moralis Server](https://docs.moralis.io/moralis-server/getting-started/create-a-moralis-server)) 
+Example:
+```jsx
+REACT_APP_MORALIS_APPLICATION_ID = xxxxxxxxxxxx
+REACT_APP_MORALIS_SERVER_URL = https://xxxxxx.grandmoralis.com:2053/server
+```
+
+Deploy `NFT` and `MarketPlace` contracts present in the contracts folder on any local blockchain created using for example [Ganache](https://trufflesuite.com/ganache/) or to any public blockchains for example `Mumbai Testnet` using [Hardhat](https://hardhat.org/) or [Remix IDE](https://remix.ethereum.org/) etc.
+
+Create contractsData folder in the root directory and add following 4 JSON files onto it:
+
+- NFT-address.json / Marketplace-address.json : Contains address of the deployed contract
+```json
+  {
+    "address": 
+  }
+```
+
+- NFT.json / Marketplace.json : Contains the metadata including `abi` for the deployed contract
+```json
+  {
+    "abi": 
+  }
+```
+
 # Documentation
 - [How to Contribute](./CONTRIBUTING.md)
