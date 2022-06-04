@@ -24,7 +24,7 @@
     "d3-geo-projection": "^4.0.0",
     "d3-scale": "^4.0.2",
     "globe.gl": "^2.26.1",
-    "moralis": "^1.7.0",
+    "moralis": "^1.8.0",
     "nuxt": "^2.15.7",
     "simple-code-editor": "^1.2.2",
     "three": "^0.140.2",
