@@ -194,7 +194,7 @@ import {
   CTag
 } from '@chakra-ui/vue'
 // import ArtworkGlobe from '~/components/ArtworkGlobe.vue'
-import { monitorAccount, monitorChain, getChainID, getChainCurrency, getConnectorFromWallet, getDownloadUrlFromWallet } from '@/common/helpers'
+import AuthMixin from '../Mixins/Auth.vue'
 
 export default {
   name: 'App',
@@ -216,15 +216,12 @@ export default {
     CTag
 
   },
+  mixins: [AuthMixin],
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data () {
     return {
       isOpen: false,
       boolean: false,
-      currentUser: this.$Moralis.User.current(),
-      balance: 0,
-      chainID: null,
-      currency: 'ETH',
       mainStyles: {
         dark: {
           bg: 'gray.700',
@@ -250,27 +247,11 @@ export default {
     },
     toggleColorMode () {
       return this.$toggleColorMode
-    },
-    userAddress () {
-      return this.currentUser.get('ethAddress')
     }
   },
-  async created () {
+  created () {
     // Set intial color mode to dark
     this.$toggleColorMode()
-    if (this.currentUser) {
-      const wallet = localStorage.getItem('wallet')
-      await this.$Moralis.enableWeb3({ connector: getConnectorFromWallet(wallet) })
-      await this.updateUserInfo()
-    }
-    monitorChain(async (chainID) => {
-      this.balance = await this.getBalance(chainID)
-      this.currency = getChainCurrency(chainID)
-    })
-    monitorAccount(async (account) => {
-      await this.logout()
-      // await this.authenticate()
-    })
   },
   methods: {
     open () {
@@ -278,49 +259,7 @@ export default {
     },
     close () {
       this.isOpen = false
-    },
-    async updateUserInfo () {
-      this.chainID = await getChainID()
-      this.balance = await this.getBalance(this.chainID)
-      this.currency = getChainCurrency(this.chainID)
-    },
-    async getBalance (chainID) {
-      try {
-        const promise = await this.$Moralis.Web3API.account.getNativeBalance({ chain: chainID })
-        return parseFloat(promise.balance / 1e18).toFixed(4)
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e)
-      }
-    },
-    logout () {
-      this.$Moralis.User.logOut().then(() => {
-        this.currentUser = null
-        if (process.client) {
-          localStorage.removeItem('wallet')
-        }
-      })
-    },
-    async authenticate (wallet) {
-      try {
-        if (!this.currentUser) {
-          const connector = getConnectorFromWallet(wallet)
-          this.currentUser = await this.$Moralis.authenticate({ connector })
-          if (process.client) {
-            localStorage.setItem('wallet', wallet)
-          }
-        }
-        this.updateUserInfo()
-        this.isOpen = false
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e)
-        if (e.name === 'NoWalletError' || e.name === 'NoEthereumProviderError') {
-          window.open(getDownloadUrlFromWallet(wallet), '_blank').focus()
-        }
-      }
     }
-
   }
 
 }
