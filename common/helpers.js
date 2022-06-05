@@ -1,13 +1,13 @@
-import moralis from 'moralis'
+import Moralis from 'moralis'
 import { abi as NFTAbi } from '../contractsData/NFT.json'
 import { address as NFTAddress } from '../contractsData/NFT-address.json'
 import { NETWORKS, WALLETS } from './constants'
 
-const ethers = moralis.web3Library
+const ethers = Moralis.web3Library
 
 export const getChainID = async () => {
   try {
-    return await moralis.getChainId()
+    return await Moralis.getChainId()
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e)
@@ -23,18 +23,18 @@ export const getChainCurrency = (chainID) => {
 }
 
 export const monitorChain = (onChange) => {
-  moralis.onChainChanged(onChange)
+  Moralis.onChainChanged(onChange)
 }
 
 export const monitorAccount = (onChange) => {
-  moralis.onAccountChanged(onChange)
+  Moralis.onAccountChanged(onChange)
 }
 
 export const uploadToIPFS = async (file, isJSON = false) => {
   try {
-    const moralisFile = isJSON ? new moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) }) : new moralis.File(file.name, file)
-    await moralisFile.saveIPFS()
-    return moralisFile.ipfs()
+    const MoralisFile = isJSON ? new Moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) }) : new Moralis.File(file.name, file)
+    await MoralisFile.saveIPFS()
+    return MoralisFile.ipfs()
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e)
@@ -44,7 +44,7 @@ export const uploadToIPFS = async (file, isJSON = false) => {
 export const mintToken = async (uri) => {
   try {
     const wallet = localStorage.getItem('wallet')
-    const provider = await moralis.enableWeb3({ connector: getConnectorFromWallet(wallet) })
+    const provider = await Moralis.enableWeb3({ connector: getConnectorFromWallet(wallet) })
     const nft = new ethers.Contract(NFTAddress, NFTAbi, provider.getSigner())
     return await (await nft.mint(uri)).wait()
   } catch (e) {
@@ -79,7 +79,7 @@ function verifyChainId (chainId) {
   return chainId
 }
 
-class MetamaskConnector extends moralis.AbstractWeb3Connector {
+class MetamaskConnector extends Moralis.AbstractWeb3Connector {
   type = 'metamask';
 
   verifyEthereumBrowser () {
@@ -155,7 +155,7 @@ class MetamaskConnector extends moralis.AbstractWeb3Connector {
   }
 }
 
-class CoinBaseConnector extends moralis.AbstractWeb3Connector {
+class CoinBaseConnector extends Moralis.AbstractWeb3Connector {
   type = 'metamask';
 
   verifyEthereumBrowser () {

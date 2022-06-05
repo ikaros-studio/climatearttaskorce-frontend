@@ -120,9 +120,10 @@ import {
   CIcon
 } from '@chakra-ui/vue'
 
-import { uploadToIPFS, mintToken } from '../../common/helpers'
 import Spinner from '../Loggers/Spinner.vue'
 import HtmlOutput from './HtmlOutput.vue'
+import { NFT, addNFTToCurrentUser } from '~/common/object'
+import { uploadToIPFS } from '~/common/helpers'
 
 export default {
   components: {
@@ -244,10 +245,13 @@ export default {
           work_type: this.work_type
         }
         const metadataURL = await uploadToIPFS(metaData, true)
-        console.log(await mintToken(metadataURL))
+        const nft = NFT.create(metadataURL)
+        await nft.save()
+        addNFTToCurrentUser(nft)
         this.loading = false
       } catch (e) {
         this.loading = false
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     }
