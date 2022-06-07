@@ -1,12 +1,5 @@
 <template>
-  <CBox
-    id="artworkarch-container"
-    class="bg-gradient"
-    v-bind="mainStyles[colorMode]"
-    font-size="5xl"
-    font-weight="bold"
-    h="100vh"
-  >
+  <CBox>
     <div v-bind="mainStyles[colorMode]" id="canvas" />
     <div
       id="globeViz"
@@ -82,9 +75,7 @@ export default {
     svg.append('g').attr('id', 'textarc').selectAll('text')
       .data(arcdata).enter()
       // .attr('href', '/login').attr('as', 'router-link')
-      .append('a').append('text').attr('class', 'artworklink').on('click', function () {
-        alert('artworks will be available soon')
-      })
+      .append('a').attr('href', '/artwork').append('text').attr('class', 'artworklink')
       // .style('fill', 'transparent')
 
       .attr('transform', function (d, i) {
