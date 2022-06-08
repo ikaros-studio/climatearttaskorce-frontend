@@ -1,6 +1,6 @@
 <template>
   <CBox v-bind="mainStyles[colorMode]">
-    <CGrid p="5" template-columns="repeat(6, 1fr)" gap="6">
+    <CGrid v-for="artwork, id in artworks" :key="id" p="5" template-columns="repeat(6, 1fr)" gap="6">
       <CGridItem
         col-span="4"
         w="100%"
@@ -9,8 +9,8 @@
         <CBox
           min-h="80vh"
         >
-          <img v-if="artwork.type == 'image' || (artwork.type == 'video')" width="100%" height="100%" class="rounded" src="https://c.tenor.com/pEn3B-VlDp4AAAAC/space-cat.gif">
-          <iframe v-if="artwork.type == 'code'" border-radius="sm" />
+          <img v-if="artwork.file_type == 'image' || (artwork.file_type == 'video')" width="100%" height="100%" class="rounded" :src="artwork.artwork">
+          <iframe v-if="artwork.file_type == 'code'" border-radius="sm" />
         </CBox>
       </CGridItem>
       <CGridItem
@@ -81,6 +81,8 @@ import {
   CFlex,
   CLink
 } from '@chakra-ui/vue'
+import { getURLFromHash } from '~/common/helpers'
+import { getNFTsForCurrentUser } from '~/common/object'
 
 export default {
   components: {
@@ -96,13 +98,13 @@ export default {
   data () {
     return {
       showInfo: true,
-      artwork: {
+      artworks: [{
         name: 'Artwork 1',
         material: 'Acrylic on canvas',
         artists: ['Climate art taskforce dev', 'Gaurav'],
         type: 'image',
         description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-      },
+      }],
       mainStyles: {
         dark: {
           bg: 'gray.700',
@@ -114,6 +116,20 @@ export default {
         }
       }
     }
+  },
+  async fetch () {
+    const NFTs = await getNFTsForCurrentUser()
+    const metadataArray = await Promise.all(NFTs.map(async (NFT) => {
+      const hash = NFT.get('metadataHash')
+      const metadataJSON = await (await fetch(getURLFromHash(hash))).json()
+      return metadataJSON
+    }))
+    this.artworks = metadataArray.map((metadata) => {
+      return {
+        ...metadata,
+        artwork: getURLFromHash(metadata.artwork)
+      }
+    })
   },
   computed: {
     colorMode () {

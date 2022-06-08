@@ -1,5 +1,5 @@
 import Moralis from 'moralis'
-import { mintToken } from './helpers'
+import { getURLFromHash, mintToken } from './helpers'
 
 export class NFT extends Moralis.Object {
   constructor () {
@@ -8,7 +8,7 @@ export class NFT extends Moralis.Object {
 
   async mint () {
     try {
-      const tokenURI = await mintToken(this.get('metadataURI'))
+      const tokenURI = await mintToken(getURLFromHash(this.get('metadataHash')))
       this.set('isMinted', true)
       await this.save()
       return tokenURI
@@ -18,9 +18,9 @@ export class NFT extends Moralis.Object {
     }
   }
 
-  static create (URI) {
+  static create (hash) {
     const nft = new NFT()
-    nft.set('metadataURI', URI)
+    nft.set('metadataHash', hash)
     nft.set('isMinted', false)
     return nft
   }
@@ -31,6 +31,12 @@ export const addNFTToCurrentUser = async (NFT) => {
   const relation = user.relation('NFTs')
   relation.add(NFT)
   await user.save()
+}
+
+export const getNFTsForCurrentUser = async () => {
+  const user = Moralis.User.current()
+  const relation = user.relation('NFTs')
+  return await relation.query().find()
 }
 
 Moralis.Object.registerSubclass('NFT', NFT)

@@ -28,7 +28,7 @@
         <c-modal-header>{{ cta }}</c-modal-header>
         <c-modal-close-button />
         <c-modal-body>
-          <CTabs variant="soft-rounded">
+          <CTabs variant="soft-rounded" @change="onTabChange">
             <CTabList>
               <CTab mr="2">
                 <CIcon mr="1" name="photo-film" /> Media file
@@ -123,7 +123,7 @@ import {
 import Spinner from '../Loggers/Spinner.vue'
 import HtmlOutput from './HtmlOutput.vue'
 import { NFT, addNFTToCurrentUser } from '~/common/object'
-import { uploadToIPFS } from '~/common/helpers'
+import { getFileType, uploadToIPFS } from '~/common/helpers'
 
 export default {
   components: {
@@ -173,6 +173,7 @@ export default {
       artist_name: null,
       description: null,
       loading: false,
+      activeTab: 'media',
       uploadform: [
         // TODO: CUSTOM STYLE FOR FILE
         {
@@ -232,6 +233,14 @@ export default {
         this[id] = event.target.value
       }
     },
+    onTabChange (tab) {
+      switch (tab) {
+        case 0 : this.activeTab = 'media'
+          break
+        case 1 : this.activeTab = 'code'
+          break
+      }
+    },
     async onSubmit () {
       try {
         this.isOpen = false
@@ -242,10 +251,11 @@ export default {
           description: this.description,
           artist_name: this.artist_name,
           artwork: artFileURL,
-          work_type: this.work_type
+          work_type: this.work_type,
+          file_type: this.activeTab === 'media' ? getFileType(this.art_file) : 'code'
         }
-        const metadataURL = await uploadToIPFS(metaData, true)
-        const nft = NFT.create(metadataURL)
+        const metadataHash = await uploadToIPFS(metaData, true)
+        const nft = NFT.create(metadataHash)
         await nft.save()
         addNFTToCurrentUser(nft)
         this.loading = false

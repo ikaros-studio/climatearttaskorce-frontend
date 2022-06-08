@@ -31,14 +31,28 @@ export const monitorAccount = (onChange) => {
 }
 
 export const uploadToIPFS = async (file, isJSON = false) => {
+  if (!file) {
+    return
+  }
   try {
     const MoralisFile = isJSON ? new Moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) }) : new Moralis.File(file.name, file)
     await MoralisFile.saveIPFS()
-    return MoralisFile.ipfs()
+    return MoralisFile.hash()
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e)
   }
+}
+
+export const getURLFromHash = (hash) => {
+  return `https://gateway.moralisipfs.com/ipfs/${hash}`
+}
+
+export const getFileType = (file) => {
+  if (!file) {
+    return
+  }
+  return file.type.split('/')[0]
 }
 
 export const mintToken = async (uri) => {
