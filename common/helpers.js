@@ -30,12 +30,25 @@ export const monitorAccount = (onChange) => {
   Moralis.onAccountChanged(onChange)
 }
 
-export const uploadToIPFS = async (file, isJSON = false) => {
+export const uploadToIPFS = async (file, type = 'media') => {
   if (!file) {
     return
   }
   try {
-    const MoralisFile = isJSON ? new Moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) }) : new Moralis.File(file.name, file)
+    let MoralisFile
+    switch (type) {
+      case 'media' :
+        MoralisFile = new Moralis.File(file.name, file)
+        break
+
+      case 'json' :
+        MoralisFile = new Moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) })
+        break
+
+      case 'html' :
+        MoralisFile = new Moralis.File('data.html', { base64: btoa(file) }, 'text/html')
+    }
+
     await MoralisFile.saveIPFS()
     return MoralisFile.hash()
   } catch (e) {

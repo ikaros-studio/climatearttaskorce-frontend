@@ -245,7 +245,9 @@ export default {
       try {
         this.isOpen = false
         this.loading = true
-        const artFileURL = await uploadToIPFS(this.art_file)
+        const artFileURL = this.activeTab === 'media'
+          ? await uploadToIPFS(this.art_file)
+          : await uploadToIPFS(this.rawHtml, 'html')
         const metaData = {
           name: this.art_name,
           description: this.description,
@@ -254,7 +256,7 @@ export default {
           work_type: this.work_type,
           file_type: this.activeTab === 'media' ? getFileType(this.art_file) : 'code'
         }
-        const metadataHash = await uploadToIPFS(metaData, true)
+        const metadataHash = await uploadToIPFS(metaData, 'json')
         const nft = NFT.create(metadataHash)
         await nft.save()
         addNFTToCurrentUser(nft)

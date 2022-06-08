@@ -9,8 +9,8 @@
         <CBox
           min-h="80vh"
         >
-          <img v-if="artwork.file_type == 'image' || (artwork.file_type == 'video')" width="100%" height="100%" class="rounded" :src="artwork.artwork">
-          <iframe v-if="artwork.file_type == 'code'" border-radius="sm" />
+          <img v-if="artwork.file_type === 'image' || (artwork.file_type === 'video')" width="100%" height="100%" class="rounded" :src="artwork.artwork">
+          <iframe v-if="artwork.file_type === 'code' || artwork.file_type === 'text'" border-radius="sm" :src="artwork.artwork" />
         </CBox>
       </CGridItem>
       <CGridItem
