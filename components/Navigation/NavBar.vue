@@ -38,7 +38,6 @@
           />
         </CLink>
         <CStack
-
           ml="5"
           d="flex"
           align-items="center"

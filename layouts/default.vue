@@ -9,17 +9,16 @@
         >
           <CReset />
           <NavBar />
-          <CFlex id="bodycontainer" w="100%">
+          <Nuxt />
+          <!-- <CFlex id="bodycontainer" w="100%">
             <CBox min-w="70vw">
-              <Nuxt />
+
             </CBox>
             <CBox
               id="description-container"
               w="30vw"
-            >
-              <Description />
-            </CBox>
-          </CFlex>
+            />
+          </CFlex> -->
           <Footer />
         </CBox>
       </CColorModeProvider>
@@ -31,12 +30,10 @@ import {
   CThemeProvider,
   CColorModeProvider,
   CReset,
-  CBox,
-  CFlex
+  CBox
 
 } from '@chakra-ui/vue'
 import NavBar from '@/components/Navigation/NavBar.vue'
-import Description from '~/components/Navigation/Description.vue'
 import Footer from '@/components/Navigation/Footer.vue'
 
 export default {
@@ -46,9 +43,7 @@ export default {
     CColorModeProvider,
     CReset,
     CBox,
-    CFlex,
     NavBar,
-    Description,
     Footer
   },
   data () {
