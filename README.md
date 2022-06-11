@@ -32,16 +32,16 @@ REACT_APP_MORALIS_SERVER_URL = https://xxxxxx.grandmoralis.com:2053/server
 
 Deploy `NFT` and `MarketPlace` contracts present in the contracts folder on any local blockchain created using for example [Ganache](https://trufflesuite.com/ganache/) or to any public blockchains for example `Mumbai Testnet` using [Hardhat](https://hardhat.org/) or [Remix IDE](https://remix.ethereum.org/) etc.
 
-Create contractsData folder in the root directory and add following 4 JSON files onto it:
+Create contractsData folder in the root directory and add following 2 JSON files onto it:
 
-- NFT-address.json / Marketplace-address.json : Contains address of the deployed contract
+- NFT-address.json / NFT-address.json : Contains address of the deployed contract
 ```json
   {
     "address": 
   }
 ```
 
-- NFT.json / Marketplace.json : Contains the metadata including `abi` for the deployed contract
+- NFT.json / NFT.json : Contains the metadata including `abi` for the deployed contract
 ```json
   {
     "abi": 
