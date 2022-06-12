@@ -1,12 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500&family=Work+Sans:ital,wght@1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@1,800&display=swap');
 
 .catfont {
     font-family: 'Work Sans' !important;
 }
 
+.plexsans {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
 .z-100 {
     z-index: 1000 !important;
+}
+
+.transparent-card {
+    background-color: rgba(255, 255, 255, .35) !important;
+    border: 1px solid rgba(255, 255, 255, .25) !important;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25) !important;
+    backdrop-filter: blur(15px) !important;
 }
 
 body,
@@ -20,7 +31,7 @@ a {
 }
 
 .bg-gradient {
-    background: linear-gradient(-65deg, #005F99, #00EAD3, #005F99, #00EAD3);
+    background: linear-gradient(-65deg, #005F99, #00EAD3, #005F99, #005F99);
     background-size: 400% 400%;
     animation: gradient 100s ease infinite;
     height: 100vh;

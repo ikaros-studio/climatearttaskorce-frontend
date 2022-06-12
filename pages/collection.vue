@@ -12,7 +12,7 @@
       justify-content="space-between"
       align-items="center"
     >
-      <CText font-weight="bold" font-size="2xl">
+      <CText font-weight="400" font-size="2xl">
         Your collection
       </CText>
       <CButton @click="$fetch">
@@ -28,7 +28,7 @@
     >
       <CAlert
         font-size="sm"
-        border-radius="sm"
+        border-radius="1rem"
         status="info"
       >
         <CAlertIcon />
@@ -40,8 +40,9 @@
       <CGridItem v-for="artwork, id in artworks" :key="id">
         <CBox
           border="1px"
-          border-color="gray.300"
-          border-radius="sm"
+          border-color="gray.100"
+          border-radius="1rem"
+          shadow="md"
           w="100%"
           bg="white"
         >

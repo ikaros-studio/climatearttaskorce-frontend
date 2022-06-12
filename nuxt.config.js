@@ -24,7 +24,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image', href: './static/img/favicon.png' },
+      { rel: 'icon', type: 'image/x-icon', href: '/static/img/favicon.png' },
 
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' },

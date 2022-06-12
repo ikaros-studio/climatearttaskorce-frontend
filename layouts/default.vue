@@ -9,7 +9,7 @@
         >
           <CReset />
           <NavBar />
-          <Nuxt />
+          <Nuxt id="container" />
           <!-- <CFlex id="bodycontainer" w="100%">
             <CBox min-w="70vw">
 
@@ -81,9 +81,12 @@ export default {
 </script>
 
 <style>
+#container {
+}
+
 #main-grid {
   /* overflow:hidden; */
-  height: 100vh !important;
+  min-height: 100vh !important;
 }
 
 #description-container {
