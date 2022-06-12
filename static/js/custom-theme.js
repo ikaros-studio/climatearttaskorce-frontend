@@ -2,8 +2,9 @@ const customTheme = {
   breakpoints: ['30em', '48em', '62em', '80em'],
   fonts: {
     heading: 'Work Sans',
-    body: 'IBM Plex Sans',
-    mono: 'IBM Plex Sans'
+    body: '"IBM Plex Sans", sans-serif',
+    mono: 'Work Sans',
+    button: 'Work Sans'
   },
   colors: {
     catblue: {
