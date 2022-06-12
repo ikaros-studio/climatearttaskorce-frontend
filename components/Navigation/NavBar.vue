@@ -1,10 +1,14 @@
 <template>
-  <div
-    id="navbar"
-    class="container"
+  <CBox
+    v-bind="mainStyles[colorMode]"
+    z-index="docked"
+    p="5"
+    w="100%"
   >
     <CBox
       w="100%"
+      border-radius="1rem"
+      class="transparent-card"
       v-bind="mainStyles[colorMode]"
       border-bottom="1px"
       border-bottom-color="gray.200"
@@ -96,7 +100,7 @@
             :is-centered="true"
             z-index="modal"
           >
-            <CModalContent ref="content" border-radius="sm">
+            <CModalContent ref="content" border-radius="1rem">
               <CModalCloseButton />
               <CModalBody m="5">
                 <CBox v-if="!currentUser" m="3" align="center">
@@ -131,57 +135,99 @@
           Log In<CIcon ml="1" name="arrow-right-to-bracket" size="24px" />
         </CButton>
         <CBox v-else>
-          <CMenu mr="3">
-            <CMenuButton
-              border-radius="100%"
+          <CPopover
+            placement="bottom"
+            trigger="hover"
+          >
+            <CPopoverTrigger>
+              <CButton
+                border-radius="100%"
+                border="1px"
+                border-color="gray.300"
+                p="0"
+                trigger="hover"
+              >
+                <CIcon name="user" />
+              </CButton>
+            </CPopoverTrigger>
+            <CPopoverContent
+              z-index="dropdown"
+              box-shadow="lg"
               border="1px"
-              border-color="gray.300"
-              p="0"
+              border-color="gray.100"
+              p="3"
+              border-radius="1rem"
             >
-              <CIcon name="user" />
-            </CMenuButton>
-            <CMenuList>
-              <CMenuItem as="router-link" to="/collection" py="2">
-                <CIcon
-                  mr="2"
-                  name="layer-group"
-                />My collection
-              </CMenuItem>
-              <CMenuItem py="2">
-                <CIcon
-                  mr="2"
-                  name="arrow-up-from-bracket"
-                />Upload an artwork
-              </CMenuItem>
-              <CMenuItem py="2" @click="toggleColorMode">
-                <CIcon
-                  mr="2"
-                  :name="colorMode === 'light' ? 'moon' : 'sun'"
-                />{{ `Switch to ${
-                  colorMode === 'light' ? 'dark' : 'light'
-                } mode` }}
-              </CMenuItem>
+              <CStack font-weight="300">
+                <CLink as="router-link" to="/collection">
+                  <CIcon
+                    mr="2"
+                    name="layer-group"
+                  />My collection
+                </CLink>
+                <CLink as="router-link" to="/collection">
+                  <CIcon
+                    mr="2"
+                    name="arrow-up-from-bracket"
+                  />Upload an artwork
+                </CLink>
+                <CLink @click="toggleColorMode">
+                  <CIcon
+                    mr="2"
+                    :name="colorMode === 'light' ? 'moon' : 'sun'"
+                  />{{ `Switch to ${
+                    colorMode === 'light' ? 'dark' : 'light'
+                  } mode` }}
+                </CLink>
+                <CDivider my="2" />
+                <CLink @click="logout()">
+                  <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
+                </CLink>
+              </CStack>
+            <!-- <CMenuList>
+                <CMenuItem as="router-link" to="/collection" py="2">
+                  <CIcon
+                    mr="2"
+                    name="layer-group"
+                  />My collection
+                </CMenuItem>
+                <CMenuItem as="router-link" to="/collection" py="2">
 
-              <CMenuDivider />
-              <CMenuItem py="2" @click="logout()">
-                <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
-              </CMenuItem>
-            </CMenuList>
-          </CMenu>
+                </CMenuItem>
+                <CMenuItem py="2" @click="toggleColorMode">
+                  <CIcon
+                    mr="2"
+                    :name="colorMode === 'light' ? 'moon' : 'sun'"
+                  />{{ `Switch to ${
+                    colorMode === 'light' ? 'dark' : 'light'
+                  } mode` }}
+                </CMenuItem>
+
+                <CMenuDivider />
+                <CMenuItem py="2" @click="logout()">
+                  <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
+                </CMenuItem>
+              </CMenuList> -->
+            </CPopoverContent>
+          </CPopover>
         </CBox>
       </CStack>
     </CBox>
-  </div>
+  </CBox>
 </template>
 
 <script lang="js">
 import {
+  CPopover,
+  CPopoverContent,
+  CPopoverTrigger,
   CBox,
-  CMenu,
-  CMenuButton,
-  CMenuList,
-  CMenuItem,
-  CMenuDivider,
+  // CMenu,
+  // // CMenuButton,
+  // CMenuList,
+  // CMenuItem,
+  // CMenuDivider,
+  CDivider,
   CLink,
   CButton,
   CStack,
@@ -198,12 +244,16 @@ import AuthMixin from '../Mixins/Auth.vue'
 export default {
   name: 'App',
   components: {
+    CPopover,
+    CPopoverContent,
+    CPopoverTrigger,
     CBox,
-    CMenu,
-    CMenuButton,
-    CMenuList,
-    CMenuItem,
-    CMenuDivider,
+    CDivider,
+    // CMenu,
+    // // CMenuButton,
+    // CMenuList,
+    // CMenuItem,
+    // CMenuDivider,
     CLink,
     CButton,
     CImage,
@@ -221,6 +271,7 @@ export default {
     return {
       isOpen: false,
       boolean: false,
+      isMenuOpen: false,
       mainStyles: {
         dark: {
           bg: 'gray.700',
@@ -269,4 +320,5 @@ span#modal-portal-authmodal {
     position: relative !important;
     z-index: 200;
 }
+
 </style>

@@ -108,7 +108,7 @@ export default {
         .then((landTopo) => {
           this.globe
             .polygonsData(topojson.feature(landTopo, landTopo.objects.land).features)
-            .polygonCapMaterial(new THREE.MeshMatcapMaterial({ color: '#005F99' }))
+            .polygonCapMaterial(new THREE.MeshNormalMaterial({ color: 'white' }))
             // .polygonAltitude(0.001)
             .polygonSideColor(() => '#ffffff00')
         })
