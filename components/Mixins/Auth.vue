@@ -58,6 +58,7 @@ export default {
         if (process.client) {
           localStorage.removeItem('wallet')
         }
+        this.$router.push('/')
       })
     },
     async authenticate (wallet) {
