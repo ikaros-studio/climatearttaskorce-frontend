@@ -5,7 +5,7 @@
     border-color="gray.300"
     min-h="250px"
     border="1px"
-    border-radius="sm"
+    border-radius="1rem"
     flex-direction="column"
   >
     <client-only>

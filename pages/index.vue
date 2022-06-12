@@ -1,8 +1,9 @@
 <template>
-  <div class="container">
+  <CBox
+    v-bind="mainStyles[colorMode]"
+  >
     <CBox
       id="artworkarch-container"
-      class="bg-gradient"
       v-bind="mainStyles[colorMode]"
       font-size="5xl"
       font-weight="bold"
@@ -12,16 +13,42 @@
           <ArtworkArch />
         </CGridItem>
         <CGridItem
-          bg="transparent"
+          v-bind="mainStyles[colorMode]"
+          my="auto"
+          mr="5"
+          class="transparent-card"
           border-left="1px"
-          border-color="gray-300"
+          border-color="gray.300"
           col-span="2"
           d="flex"
+          border-radius="1rem"
           align-items="center"
           p="5"
-          h="100vh"
+          h="70vh"
         >
           <CText mb="5" font-size="sm" font-weight="light">
+            <CLink
+              as="router-link"
+              to="/"
+              d="flex"
+              mb="5"
+              align-items="center"
+            >
+              <CImage
+                v-if="colorMode == 'light'"
+                height="5rem"
+                my="auto"
+                mr="3"
+                :src="require('~/static/img/logos/layer_logo_light.svg')"
+              />
+              <CImage
+                v-else-if="colorMode == 'dark'"
+                my="auto"
+                height="5rem"
+                mr="3"
+                :src="require('~/static/img/logos/layer_logo_dark.svg')"
+              />
+            </CLink>
             The climate art taskforce (<i>CAT</i>) is a global alliance of
             interdisciplinary digital artists against climate change. Based on an
             open source platform, <i>CAT</i> curates and publishes digital
@@ -41,7 +68,7 @@
 
       <!-- <ArtworkGlobe /> -->
     </CBox>
-  </div>
+  </CBox>
 </template>
 
 <script lang="js">

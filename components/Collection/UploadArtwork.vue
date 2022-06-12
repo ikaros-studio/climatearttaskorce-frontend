@@ -3,8 +3,10 @@
     <CButton
       loading-text="Uploading"
       :is-loading="loading"
+      size="sm"
       w="100%"
       variant-color="catblue"
+      border-radius="1rem"
       @click="open"
     >
       <CText>
@@ -22,7 +24,7 @@
     >
       <c-modal-content
         ref="content"
-        border-radius="sm"
+        border-radius="1rem"
       >
         <c-modal-header>{{ cta }}</c-modal-header>
         <c-modal-close-button />
@@ -52,7 +54,7 @@
                 </CStack>
               </CTabPanel>
               <CTabPanel>
-                <CAlert v-if="showInfo" font-size="sm" border-radius="sm" status="info">
+                <CAlert v-if="showInfo" font-size="sm" border-radius="1rem" status="info">
                   <CAlertIcon />
                   When uploading code-based artworks make sure to include every code in one HTML file. For extensive files, we recommend editiing in your favourite code editor and inserting the code in here once ready.
                   <CCloseButton position="absolute" right="8px" top="8px" @click="showInfo = false" />
