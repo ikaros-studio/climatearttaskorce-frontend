@@ -39,4 +39,8 @@ export const getNFTsForCurrentUser = async () => {
   return await relation.query().find()
 }
 
+// TODO: Add Singe NFT call
+
+// TODO: Add Call for all NFTs
+
 Moralis.Object.registerSubclass('NFT', NFT)

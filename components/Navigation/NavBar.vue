@@ -141,7 +141,7 @@
               <CIcon name="user" />
             </CMenuButton>
             <CMenuList>
-              <CMenuItem as="router-link" to="collection" py="2">
+              <CMenuItem as="router-link" to="/collection" py="2">
                 <CIcon
                   mr="2"
                   name="layer-group"

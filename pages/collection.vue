@@ -3,11 +3,25 @@
     v-bind="mainStyles[colorMode]"
     min-h="100vh"
   >
-    <CText p="5" font-weight="bold" font-size="2xl">
-      Your collection
-    </CText>
     <CBox
-      v-if="artworks.length < 1"
+      border-bottom="1px"
+      border-color="gray.200"
+      w="100%"
+      p="5"
+      d="flex"
+      justify-content="space-between"
+      align-items="center"
+    >
+      <CText font-weight="bold" font-size="2xl">
+        Your collection
+      </CText>
+      <CButton @click="$fetch">
+        Fetch
+      </CButton>
+      <UploadArtwork v-if="artworks.length > 0" :cta="'Upload another artwork'" @onupload="$fetch" />
+    </CBox>
+    <CBox
+      v-if="(artworks.length < 1) && !$fetchState.pending"
       p="5"
       h="100%"
       w="100%"
@@ -20,23 +34,25 @@
         <CAlertIcon />
         You don't have any artworks in your collection yet. Create one or explore existing ones.
       </CAlert>
-      <UploadArtwork :cta="'Upload your first artwork'" />
+      <UploadArtwork w="100%" :cta="'Upload your first artwork'" />
     </CBox>
-    <CGrid v-else p="5" template-columns="repeat(3, 4fr)" gap="4">
+    <CGrid v-else p="5" template-columns="repeat(4, 1fr)" gap="4">
       <CGridItem v-for="artwork, id in artworks" :key="id">
         <CBox
           border="1px"
           border-color="gray.300"
           border-radius="sm"
-          h="300px"
           w="100%"
+          bg="white"
         >
-          {{ artwork }}
-          <FileDisplay :type="artwork.file_type" :link="artwork.artwork" />
+          <FileDisplay :type="artwork.file_type" :link="artwork.link" />
         </CBox>
-      </CGridItem>
-      <CGridItem w="100%">
-        <UploadArtwork />
+        <CButton
+          as="router-link"
+          :to="'/artworks/' + artwork.artwork"
+        >
+          View
+        </CButton>
       </CGridItem>
     </CGrid>
   </CBox>
@@ -92,7 +108,7 @@ export default {
     this.artworks = metadataArray.map((metadata) => {
       return {
         ...metadata,
-        artwork: getURLFromHash(metadata.artwork)
+        link: getURLFromHash(metadata.artwork)
       }
     })
   },

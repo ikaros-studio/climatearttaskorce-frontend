@@ -1,13 +1,12 @@
 <template>
   <CBox v-bind="mainStyles[colorMode]">
-    <CGrid v-for="artwork, id in artworks" :key="id" p="5" template-columns="repeat(6, 1fr)" gap="6">
+    <CGrid p="5" template-columns="repeat(6, 1fr)" gap="6">
       <CGridItem
         col-span="4"
         w="100%"
         h="100%"
       >
-        {{ artwork }}
-        <FileDisplay :type="artwork.file_type" :link="artwork.artwork" />
+        <FileDisplay :type="artwork.file_type" :link="artwork.metadata" />
       </CGridItem>
       <CGridItem
         float="bottom"
@@ -69,34 +68,43 @@
 
 <script>
 import {
-  CBox,
-  CTag,
-  CGrid,
-  CGridItem,
-  CStack,
-  CFlex,
-  CLink
+  CBox
+  // CTag,
+  // CGrid,
+  // CGridItem,
+  // CStack,
+  // CFlex,
+  // CLink
 } from '@chakra-ui/vue'
-import FileDisplay from '@/components/Artwork/FileDisplay'
+// import FileDisplay from '@/components/Artwork/FileDisplay'
 import { getURLFromHash } from '~/common/helpers'
-import { getNFTsForCurrentUser } from '~/common/object'
+// // import { getNFTsForCurrentUser } from '~/common/object'
 
 export default {
   components: {
-    CBox,
-    CTag,
-    CGrid,
-    CGridItem,
-    CStack,
-    CFlex,
-    CLink,
-    FileDisplay
+    CBox
+    // CTag,
+    // CGrid,
+    // CGridItem,
+    // CStack,
+    // CFlex,
+    // CLink,
+    // FileDisplay
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
+  // TODO: Fetch artwork object
+  async asyncData ({ params }) {
+    const hash = params.hash // When calling /abc the slug will be "abc"
+    const metadata = await getURLFromHash(hash)
+    return { metadata }
+  },
   data () {
     return {
       showInfo: true,
       artworks: [],
+      artwork: {
+        file_type: 'image'
+      },
       mainStyles: {
         dark: {
           bg: 'gray.700',
@@ -107,25 +115,6 @@ export default {
           color: 'gray.900'
         }
       }
-    }
-  },
-  async fetch () {
-    const NFTs = await getNFTsForCurrentUser()
-    const metadataArray = await Promise.all(NFTs.map(async (NFT) => {
-      const hash = NFT.get('metadataHash')
-      const metadataJSON = await (await fetch(getURLFromHash(hash))).json()
-      return metadataJSON
-    }))
-    this.artworks = metadataArray.map((metadata) => {
-      return {
-        ...metadata,
-        artwork: getURLFromHash(metadata.artwork)
-      }
-    })
-  },
-  computed: {
-    colorMode () {
-      return this.$chakraColorMode()
     }
   }
 }

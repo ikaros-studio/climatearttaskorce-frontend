@@ -1,11 +1,10 @@
 <template>
-  <CBox w="100%">
-    <Spinner :loading="loading" />
+  <CBox>
     <CButton
-      border="1px"
-      border-color="gray.300"
-      h="300px"
+      loading-text="Uploading"
+      :is-loading="loading"
       w="100%"
+      variant-color="catblue"
       @click="open"
     >
       <CText>
@@ -39,7 +38,7 @@
             <CTabPanels>
               <CTabPanel>
                 <CStack spacing="4">
-                  <CFormControl v-for="el, index in uploadform" :key="index">
+                  <CFormControl v-for="el, index in mediauploadform" :key="index">
                     <CFormLabel>{{ el.label }}</CFormLabel>
                     <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
                     <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
@@ -75,6 +74,19 @@
                     :value="rawHtml"
                   />
                 </client-only>
+                <CStack mt="5" spacing="4">
+                  <CFormControl v-for="el, index in codeuploadform" :key="index">
+                    <CFormLabel>{{ el.label }}</CFormLabel>
+                    <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
+                    <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
+                      <option v-for="opt in el.options" :key="opt" :value="opt">
+                        {{ opt }}
+                      </option>
+                    </CSelect>
+                    <CFormHelperText>{{ el.description }}</CFormHelperText>
+                    <CFormErrorMessage />
+                  </CFormControl>
+                </CStack>
               </CTabPanel>
             </CTabPanels>
           </CTabs>
@@ -120,7 +132,6 @@ import {
   CIcon
 } from '@chakra-ui/vue'
 
-import Spinner from '../Loggers/Spinner.vue'
 import HtmlOutput from './HtmlOutput.vue'
 import { NFT, addNFTToCurrentUser } from '~/common/object'
 import { getFileType, uploadToIPFS } from '~/common/helpers'
@@ -148,7 +159,6 @@ export default {
     CModalBody,
     CModalCloseButton,
     CStack,
-    Spinner,
     CDivider,
     HtmlOutput,
     CIcon
@@ -174,7 +184,31 @@ export default {
       description: null,
       loading: false,
       activeTab: 'media',
-      uploadform: [
+      codeuploadform: [
+        // TODO: CUSTOM STYLE FOR FILE
+        {
+          id: 'art_name',
+          name: 'Name',
+          label: 'Artwork name',
+          type: 'text',
+          description: 'Please indicate the artworks name'
+        },
+        {
+          id: 'artist_name',
+          name: 'Name',
+          label: 'Artist(s)',
+          type: 'text',
+          description: 'Please indicate the name of the Artist(s) through a comma'
+        },
+        {
+          id: 'description',
+          name: 'Name',
+          label: 'Description',
+          type: 'text',
+          description: 'Please provide a short description or abstracht regarding your artwork'
+        }
+      ],
+      mediauploadform: [
         // TODO: CUSTOM STYLE FOR FILE
         {
           id: 'art_file',
@@ -201,9 +235,9 @@ export default {
         {
           id: 'artist_name',
           name: 'Name',
-          label: 'Artist',
+          label: 'Artist(s)',
           type: 'text',
-          description: 'Please indicate the name of the Artist(s)'
+          description: 'Please indicate the name of the Artist(s) through a comma'
         },
         {
           id: 'description',
@@ -214,9 +248,6 @@ export default {
         }
       ]
     }
-  },
-  mounted () {
-
   },
   methods: {
     open () {
@@ -260,6 +291,7 @@ export default {
         const nft = NFT.create(metadataHash)
         await nft.save()
         addNFTToCurrentUser(nft)
+        this.$emit('onupload')
         this.loading = false
       } catch (e) {
         this.loading = false
