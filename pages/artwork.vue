@@ -6,12 +6,8 @@
         w="100%"
         h="100%"
       >
-        <CBox
-          min-h="80vh"
-        >
-          <img v-if="artwork.file_type === 'image' || (artwork.file_type === 'video')" width="100%" height="100%" class="rounded" :src="artwork.artwork">
-          <iframe v-if="artwork.file_type === 'code' || artwork.file_type === 'text'" border-radius="sm" :src="artwork.artwork" />
-        </CBox>
+        {{ artwork }}
+        <FileDisplay :type="artwork.file_type" :link="artwork.artwork" />
       </CGridItem>
       <CGridItem
         float="bottom"
@@ -81,6 +77,7 @@ import {
   CFlex,
   CLink
 } from '@chakra-ui/vue'
+import FileDisplay from '@/components/Artwork/FileDisplay'
 import { getURLFromHash } from '~/common/helpers'
 import { getNFTsForCurrentUser } from '~/common/object'
 
@@ -92,19 +89,14 @@ export default {
     CGridItem,
     CStack,
     CFlex,
-    CLink
+    CLink,
+    FileDisplay
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data () {
     return {
       showInfo: true,
-      artworks: [{
-        name: 'Artwork 1',
-        material: 'Acrylic on canvas',
-        artists: ['Climate art taskforce dev', 'Gaurav'],
-        type: 'image',
-        description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-      }],
+      artworks: [],
       mainStyles: {
         dark: {
           bg: 'gray.700',

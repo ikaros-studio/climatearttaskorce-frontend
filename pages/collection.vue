@@ -23,23 +23,17 @@
       <UploadArtwork :cta="'Upload your first artwork'" />
     </CBox>
     <CGrid v-else p="5" template-columns="repeat(3, 4fr)" gap="4">
-      <CGridItem>
+      <CGridItem v-for="artwork, id in artworks" :key="id">
         <CBox
           border="1px"
           border-color="gray.300"
           border-radius="sm"
           h="300px"
           w="100%"
-        />
-      </CGridItem>
-      <CGridItem>
-        <CBox
-          border="1px"
-          border-radius="sm"
-          border-color="gray.300"
-          h="300px"
-          w="100%"
-        />
+        >
+          {{ artwork }}
+          <FileDisplay :type="artwork.file_type" :link="artwork.artwork" />
+        </CBox>
       </CGridItem>
       <CGridItem w="100%">
         <UploadArtwork />
@@ -57,6 +51,9 @@ import {
   CText
 } from '@chakra-ui/vue'
 import UploadArtwork from '~/components/Collection/UploadArtwork.vue'
+import { getURLFromHash } from '~/common/helpers'
+import { getNFTsForCurrentUser } from '~/common/object'
+import FileDisplay from '@/components/Artwork/FileDisplay'
 
 export default {
   components: {
@@ -65,7 +62,8 @@ export default {
     CAlertIcon,
     CGridItem,
     UploadArtwork,
-    CText
+    CText,
+    FileDisplay
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data () {
@@ -83,6 +81,20 @@ export default {
         }
       }
     }
+  },
+  async fetch () {
+    const NFTs = await getNFTsForCurrentUser()
+    const metadataArray = await Promise.all(NFTs.map(async (NFT) => {
+      const hash = NFT.get('metadataHash')
+      const metadataJSON = await (await fetch(getURLFromHash(hash))).json()
+      return metadataJSON
+    }))
+    this.artworks = metadataArray.map((metadata) => {
+      return {
+        ...metadata,
+        artwork: getURLFromHash(metadata.artwork)
+      }
+    })
   },
   computed: {
     colorMode () {
