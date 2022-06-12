@@ -49,7 +49,7 @@
         </CBox>
         <CButton
           as="router-link"
-          :to="'/artworks/' + artwork.artwork"
+          :to="'/artworks/' + artwork.hash"
         >
           View
         </CButton>
@@ -67,7 +67,6 @@ import {
   CText
 } from '@chakra-ui/vue'
 import UploadArtwork from '~/components/Collection/UploadArtwork.vue'
-import { getURLFromHash } from '~/common/helpers'
 import { getNFTsForCurrentUser } from '~/common/object'
 import FileDisplay from '@/components/Artwork/FileDisplay'
 
@@ -99,18 +98,7 @@ export default {
     }
   },
   async fetch () {
-    const NFTs = await getNFTsForCurrentUser()
-    const metadataArray = await Promise.all(NFTs.map(async (NFT) => {
-      const hash = NFT.get('metadataHash')
-      const metadataJSON = await (await fetch(getURLFromHash(hash))).json()
-      return metadataJSON
-    }))
-    this.artworks = metadataArray.map((metadata) => {
-      return {
-        ...metadata,
-        link: getURLFromHash(metadata.artwork)
-      }
-    })
+    this.artworks = await getNFTsForCurrentUser()
   },
   computed: {
     colorMode () {

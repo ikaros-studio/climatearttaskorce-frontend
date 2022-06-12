@@ -6,7 +6,7 @@
         w="100%"
         h="100%"
       >
-        <FileDisplay :type="artwork.file_type" :link="artwork.metadata" />
+        <FileDisplay :type="artwork.file_type" :link="artwork.link" />
       </CGridItem>
       <CGridItem
         float="bottom"
@@ -68,35 +68,36 @@
 
 <script>
 import {
-  CBox
-  // CTag,
-  // CGrid,
-  // CGridItem,
-  // CStack,
-  // CFlex,
-  // CLink
+  CBox,
+  CTag,
+  CGrid,
+  CGridItem,
+  CStack,
+  CFlex,
+  CLink
 } from '@chakra-ui/vue'
-// import FileDisplay from '@/components/Artwork/FileDisplay'
-import { getURLFromHash } from '~/common/helpers'
+import FileDisplay from '@/components/Artwork/FileDisplay'
+// import { getURLFromHash } from '~/common/helpers'
+import { getNFTMetadataFromHash } from '~/common/object'
 // // import { getNFTsForCurrentUser } from '~/common/object'
 
 export default {
   components: {
-    CBox
-    // CTag,
-    // CGrid,
-    // CGridItem,
-    // CStack,
-    // CFlex,
-    // CLink,
-    // FileDisplay
+    CBox,
+    CTag,
+    CGrid,
+    CGridItem,
+    CStack,
+    CFlex,
+    CLink,
+    FileDisplay
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
   // TODO: Fetch artwork object
   async asyncData ({ params }) {
     const hash = params.hash // When calling /abc the slug will be "abc"
-    const metadata = await getURLFromHash(hash)
-    return { metadata }
+    const artwork = await getNFTMetadataFromHash(hash)
+    return { artwork }
   },
   data () {
     return {
