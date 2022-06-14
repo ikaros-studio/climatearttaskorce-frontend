@@ -11,6 +11,7 @@
       border-radius="1rem"
       class="transparent-card"
       v-bind="mainStyles[colorMode]"
+      shadow="lg"
       border-bottom="1px"
       border-bottom-color="gray.200"
       px="4"
@@ -18,7 +19,8 @@
       <CFlex />
 
       <CFlex
-        p="5"
+        px="5"
+        py="3"
         align-items="center"
         justify-content="space-between"
         direction="row"

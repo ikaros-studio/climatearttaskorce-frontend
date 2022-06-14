@@ -1,6 +1,7 @@
 <template>
   <CBox>
     <CButton
+      z-index="base"
       loading-text="Uploading"
       :is-loading="loading"
       size="sm"
@@ -11,7 +12,6 @@
     >
       <CText>
         <CIcon
-          z-index="base"
           mr="2"
           name="arrow-up-from-bracket"
         />{{ cta }}
@@ -37,13 +37,25 @@
               <CTab><CIcon mr="1" name="code" />Code</CTab>
             </CTabList>
             <CDivider my="5" />
+            <CAlert v-if="missingfields" color-variant="catpink" font-size="sm" border-radius="1rem" status="info">
+              <CAlertIcon />
+              Please provide all information.
+              <CCloseButton position="absolute" right="8px" top="8px" @click="showInfo = false" />
+            </CAlert>
             <CTabPanels>
               <CTabPanel>
                 <CStack spacing="4">
                   <CFormControl v-for="el, index in mediauploadform" :key="index">
                     <CFormLabel>{{ el.label }}</CFormLabel>
-                    <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
-                    <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
+                    <CInput
+                      v-if="el.type != 'select'"
+                      :id="el.id"
+                      required
+                      :type="el.type"
+                      :placeholder="el.placeholder"
+                      @change="onChange"
+                    />
+                    <CSelect v-else :id="el.id" v-model="work_type" required placeholder="Select category">
                       <option v-for="opt in el.options" :key="opt" :value="opt">
                         {{ opt }}
                       </option>
@@ -79,8 +91,15 @@
                 <CStack mt="5" spacing="4">
                   <CFormControl v-for="el, index in codeuploadform" :key="index">
                     <CFormLabel>{{ el.label }}</CFormLabel>
-                    <CInput v-if="el.type != 'select'" :id="el.id" :type="el.type" :placeholder="el.placeholder" @change="onChange" />
-                    <CSelect v-else :id="el.id" v-model="work_type" placeholder="Select category">
+                    <CInput
+                      v-if="el.type != 'select'"
+                      :id="el.id"
+                      required
+                      :type="el.type"
+                      :placeholder="el.placeholder"
+                      @change="onChange"
+                    />
+                    <CSelect v-else :id="el.id" v-model="work_type" required placeholder="Select category">
                       <option v-for="opt in el.options" :key="opt" :value="opt">
                         {{ opt }}
                       </option>

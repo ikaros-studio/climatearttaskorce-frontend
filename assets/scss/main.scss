@@ -16,7 +16,7 @@
 .transparent-card {
     background-color: rgba(255, 255, 255, .35) !important;
     border: 1px solid rgba(255, 255, 255, .25) !important;
-    box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25) !important;
+    // box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25) !important;
     backdrop-filter: blur(15px) !important;
 }
 
@@ -25,9 +25,19 @@ button {
     font-family: 'IBM Plex Sans' !important;
 }
 
+body {
+    margin: 0px !important
+}
+
 a {
     font-family: 'IBM Plex Sans' !important;
     color: '#FF449F' !important
+}
+
+.bg-continents {
+    background-image: url('~/static/img/bg-continents.svg');
+    background-position: center;
+    margin: 0px !important;
 }
 
 .bg-gradient {

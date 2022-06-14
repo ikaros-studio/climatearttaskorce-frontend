@@ -8,6 +8,7 @@
     <CBox
       w="100%"
       border-radius="1rem"
+      shadow="lg"
       class="transparent-card"
       v-bind="mainStyles[colorMode]"
       border-bottom="1px"
@@ -48,7 +49,7 @@
           direction="row"
           spacing="4"
         >
-          <CLink
+          <c-pseudo-box
             v-for="el, index in publicmenu"
             :key="index"
             as="router-link"
@@ -56,9 +57,10 @@
             font-size="sm"
             mr="5"
             font-weight="light"
+            :_hover="{ bg: 'rgba(255,255,255,0.2)', py:1,px:2, border:'1px', borderColor:'white', borderRadius:'1rem'}"
           >
             {{ el.name }}
-          </CLink>
+          </c-pseudo-box>
         </CStack>
       </CFlex>
 
@@ -98,7 +100,7 @@
             :is-open="isOpen"
             :on-close="close"
             :is-centered="true"
-            z-index="modal"
+            z-index="toast"
           >
             <CModalContent ref="content" border-radius="1rem">
               <CModalCloseButton />
@@ -135,81 +137,45 @@
           Log In<CIcon ml="1" name="arrow-right-to-bracket" size="24px" />
         </CButton>
         <CBox v-else>
-          <CPopover
-            placement="bottom"
-            trigger="hover"
-          >
-            <CPopoverTrigger>
-              <CButton
-                border-radius="100%"
-                border="1px"
-                border-color="gray.300"
-                p="0"
-                trigger="hover"
-              >
-                <CIcon name="user" />
-              </CButton>
-            </CPopoverTrigger>
-            <CPopoverContent
-              z-index="dropdown"
-              box-shadow="lg"
+          <CMenu z-index="dropdown">
+            <CMenuButton
+              shadow="md"
+              border-radius="100%"
               border="1px"
-              border-color="gray.100"
-              p="3"
-              border-radius="1rem"
+              border-color="gray.300"
+              p="0"
+              trigger="hover"
             >
-              <CStack font-weight="300">
-                <CLink as="router-link" to="/collection">
-                  <CIcon
-                    mr="2"
-                    name="layer-group"
-                  />My collection
-                </CLink>
-                <CLink as="router-link" to="/collection">
-                  <CIcon
-                    mr="2"
-                    name="arrow-up-from-bracket"
-                  />Upload an artwork
-                </CLink>
-                <CLink @click="toggleColorMode">
-                  <CIcon
-                    mr="2"
-                    :name="colorMode === 'light' ? 'moon' : 'sun'"
-                  />{{ `Switch to ${
-                    colorMode === 'light' ? 'dark' : 'light'
-                  } mode` }}
-                </CLink>
-                <CDivider my="2" />
-                <CLink @click="logout()">
-                  <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
-                </CLink>
-              </CStack>
-            <!-- <CMenuList>
-                <CMenuItem as="router-link" to="/collection" py="2">
-                  <CIcon
-                    mr="2"
-                    name="layer-group"
-                  />My collection
-                </CMenuItem>
-                <CMenuItem as="router-link" to="/collection" py="2">
+              <CIcon name="user" />
+            </CMenuButton>
+            <CMenuList z-index="modal">
+              <CMenuItem as="router-link" to="/collection" py="2">
+                <CIcon
+                  mr="2"
+                  name="layer-group"
+                />My collection
+              </CMenuItem>
+              <CMenuItem as="router-link" to="/collection" py="2">
+                <CIcon
+                  mr="2"
+                  name="arrow-up-from-bracket"
+                />Upload an artwork
+              </CMenuItem>
+              <CMenuItem py="2" @click="toggleColorMode">
+                <CIcon
+                  mr="2"
+                  :name="colorMode === 'light' ? 'moon' : 'sun'"
+                />{{ `Switch to ${
+                  colorMode === 'light' ? 'dark' : 'light'
+                } mode` }}
+              </CMenuItem>
 
-                </CMenuItem>
-                <CMenuItem py="2" @click="toggleColorMode">
-                  <CIcon
-                    mr="2"
-                    :name="colorMode === 'light' ? 'moon' : 'sun'"
-                  />{{ `Switch to ${
-                    colorMode === 'light' ? 'dark' : 'light'
-                  } mode` }}
-                </CMenuItem>
-
-                <CMenuDivider />
-                <CMenuItem py="2" @click="logout()">
-                  <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
-                </CMenuItem>
-              </CMenuList> -->
-            </CPopoverContent>
-          </CPopover>
+              <CMenuDivider />
+              <CMenuItem py="2" @click="logout()">
+                <CIcon mr="2" name="arrow-right-from-bracket" size="24px" /> Log out
+              </CMenuItem>
+            </CMenuList>
+          </CMenu>
         </CBox>
       </CStack>
     </CBox>
@@ -218,16 +184,12 @@
 
 <script lang="js">
 import {
-  CPopover,
-  CPopoverContent,
-  CPopoverTrigger,
   CBox,
-  // CMenu,
-  // // CMenuButton,
-  // CMenuList,
-  // CMenuItem,
-  // CMenuDivider,
-  CDivider,
+  CMenu,
+  CMenuButton,
+  CMenuList,
+  CMenuItem,
+  CMenuDivider,
   CLink,
   CButton,
   CStack,
@@ -244,16 +206,12 @@ import AuthMixin from '../Mixins/Auth.vue'
 export default {
   name: 'App',
   components: {
-    CPopover,
-    CPopoverContent,
-    CPopoverTrigger,
     CBox,
-    CDivider,
-    // CMenu,
-    // // CMenuButton,
-    // CMenuList,
-    // CMenuItem,
-    // CMenuDivider,
+    CMenu,
+    CMenuButton,
+    CMenuList,
+    CMenuItem,
+    CMenuDivider,
     CLink,
     CButton,
     CImage,
@@ -319,6 +277,22 @@ export default {
 span#modal-portal-authmodal {
     position: relative !important;
     z-index: 200;
+}
+
+.hoverpill {
+  border-radius: 1rem !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+.hoverpill:hover {
+  background: rgba(255,255,255,0.2) !important;
+    text-decoration: none !important;
+    border: 1px solid rgba(255,255,255)
+
 }
 
 </style>

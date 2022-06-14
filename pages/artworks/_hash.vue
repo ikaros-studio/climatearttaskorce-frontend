@@ -1,12 +1,19 @@
 <template>
   <CBox v-bind="mainStyles[colorMode]">
-    <CGrid p="5" template-columns="repeat(6, 1fr)" gap="6">
+    <CGrid v-bind="mainStyles[colorMode]" px="5" template-columns="repeat(6, 1fr)" gap="6">
       <CGridItem
         col-span="4"
-        w="100%"
-        h="100%"
       >
-        <FileDisplay :type="artwork.file_type" :link="artwork.link" />
+        <CLink as="router-link" to="/" font-size="">
+          ← Back to artworks
+        </CLink>
+        <CBox
+          mt="5"
+          border-radius="1rem"
+          w="100%"
+        >
+          <FileDisplay :type="artwork.file_type" :link="artwork.link" />
+        </CBox>
       </CGridItem>
       <CGridItem
         float="bottom"
@@ -16,15 +23,12 @@
         align-items="center"
       >
         <CStack spacing="4">
-          <CLink as="router-link" to="/" font-size="xs">
-            ← Back to artworks
-          </CLink>
           <CText w="100%" font-size="2xl">
             {{ artwork.name }}
           </CText>
           <CFlex align-items="center">
             <CText font-size="sm" mr="1" font-weight="light">
-              Artist(s):
+              Artist(s): {{ artwork.artist_name }}
             </CText>
             <CTag
               v-for="artist, index in artwork.artists"
@@ -77,7 +81,6 @@ import {
   CLink
 } from '@chakra-ui/vue'
 import FileDisplay from '@/components/Artwork/FileDisplay'
-// import { getURLFromHash } from '~/common/helpers'
 import { getNFTMetadataFromHash } from '~/common/object'
 // // import { getNFTsForCurrentUser } from '~/common/object'
 
@@ -95,7 +98,7 @@ export default {
   inject: ['$chakraColorMode', '$toggleColorMode'],
   // TODO: Fetch artwork object
   async asyncData ({ params }) {
-    const hash = params.hash // When calling /abc the slug will be "abc"
+    const hash = params.hash // When calling /abc the hash will be "abc"
     const artwork = await getNFTMetadataFromHash(hash)
     return { artwork }
   },
@@ -116,6 +119,11 @@ export default {
           color: 'gray.900'
         }
       }
+    }
+  },
+  computed: {
+    colorMode () {
+      return this.$chakraColorMode()
     }
   }
 }

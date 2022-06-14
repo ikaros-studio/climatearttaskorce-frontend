@@ -1,14 +1,15 @@
 <template>
-  <div class="container">
+  <div>
     <CThemeProvider>
       <CColorModeProvider>
         <CBox
           id="main-grid"
           font-family="body"
           as="main"
+          bg="transparent"
         >
           <CReset />
-          <NavBar />
+          <NavBar z-index="dropdown" />
           <Nuxt id="container" />
           <!-- <CFlex id="bodycontainer" w="100%">
             <CBox min-w="70vw">
@@ -81,17 +82,10 @@ export default {
 </script>
 
 <style>
-#container {
-}
 
 #main-grid {
   /* overflow:hidden; */
   min-height: 100vh !important;
-}
-
-#description-container {
-  position: relative !important;
-  z-index: 0.5;
 }
 
 </style>

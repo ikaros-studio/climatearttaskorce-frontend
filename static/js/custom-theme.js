@@ -6,6 +6,14 @@ const customTheme = {
     mono: 'Work Sans',
     button: 'Work Sans'
   },
+  baseStyles: {
+    /**
+     * Use a function to compute desired styles
+     **/
+    CButton: {
+      borderRadius: '2rem'
+    }
+  },
   colors: {
     catblue: {
       50: '#e0ecf3',
