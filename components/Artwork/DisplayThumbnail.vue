@@ -2,6 +2,7 @@
   <CBox d="flex" w="100%" align-items="center">
     <CFlex p="{50}" w="full" align-items="center" justify-content="center">
       <CBox
+        class="transparent-card"
         bg=""
         w="100%"
         border-width="1px"

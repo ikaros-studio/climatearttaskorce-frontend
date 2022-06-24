@@ -14,6 +14,7 @@
           <!-- <ArtworkArch /> -->
         </CGridItem>
         <CGridItem
+          class="transparent-card"
           v-bind="mainStyles[colorMode]"
           my="auto"
           mr="5"
@@ -62,7 +63,7 @@
               platform itself are constantly curated for external projects and
               campaigns.
             </CText>
-            <CButton border="1px" size="lg" border-radius="2rem">
+            <CButton text-transform="uppercase" font-weight="medium" border="1px" size="lg" border-radius="2rem">
               Explore now
             </CButton>
           </CBox>
@@ -123,3 +124,27 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.marquee {
+  position: relative;
+  width: 100vw;
+  max-width: 100%;
+  height: 200px;
+  overflow-x: hidden;
+}
+
+.track {
+  position: absolute;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 32s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+</style>

@@ -19,7 +19,7 @@
       as="iframe"
       m="0"
       display="block"
-      h="100%"
+      h="80vh"
       rounded="1rem"
       w="100%"
       border-bottom="1px"
