@@ -1,6 +1,21 @@
 // Import FontAwesome icons
-import { faArrowRightToBracket, faCode, faPhotoFilm, faArrowsRotate, faArrowRightFromBracket, faLayerGroup, faArrowUpFromBracket, faUser, faAt, faWallet } from '@fortawesome/free-solid-svg-icons'
-import { faInstagram, faTelegram, faDiscord } from '@fortawesome/free-brands-svg-icons'
+import {
+  faArrowRightToBracket,
+  faCode,
+  faPhotoFilm,
+  faArrowsRotate,
+  faArrowRightFromBracket,
+  faLayerGroup,
+  faArrowUpFromBracket,
+  faUser,
+  faAt,
+  faWallet
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  faInstagram,
+  faTelegram,
+  faDiscord
+} from '@fortawesome/free-brands-svg-icons'
 
 import customTheme from './static/js/custom-theme'
 
@@ -40,9 +55,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@/assets/scss/main.scss'
-  ],
+  css: ['@/assets/scss/main.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -107,11 +120,11 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  },
+  build: {},
 
   env: {
     MoralisServerUrl: process.env.MORALIS_SERVER_URL,
-    MoralisAppId: process.env.MORALIS_APP_ID
+    MoralisAppId: process.env.MORALIS_APP_ID,
+    NftContract: process.env.NFT_CONTRACT
   }
 }

@@ -1,6 +1,5 @@
 import Moralis from 'moralis'
 import { abi as NFTAbi } from '../contractsData/NFT.json'
-import { address as NFTAddress } from '../contractsData/NFT-address.json'
 import { NETWORKS, WALLETS } from './constants'
 
 const ethers = Moralis.web3Library
@@ -37,16 +36,22 @@ export const uploadToIPFS = async (file, type = 'media') => {
   try {
     let MoralisFile
     switch (type) {
-      case 'media' :
+      case 'media':
         MoralisFile = new Moralis.File(file.name, file)
         break
 
-      case 'json' :
-        MoralisFile = new Moralis.File('metadata.json', { base64: btoa(JSON.stringify(file)) })
+      case 'json':
+        MoralisFile = new Moralis.File('metadata.json', {
+          base64: btoa(JSON.stringify(file))
+        })
         break
 
-      case 'html' :
-        MoralisFile = new Moralis.File('data.html', { base64: btoa(file) }, 'text/html')
+      case 'html':
+        MoralisFile = new Moralis.File(
+          'data.html',
+          { base64: btoa(file) },
+          'text/html'
+        )
     }
 
     await MoralisFile.saveIPFS()
@@ -71,8 +76,14 @@ export const getFileType = (file) => {
 export const mintToken = async (uri) => {
   try {
     const wallet = localStorage.getItem('wallet')
-    const provider = await Moralis.enableWeb3({ connector: getConnectorFromWallet(wallet) })
-    const nft = new ethers.Contract(NFTAddress, NFTAbi, provider.getSigner())
+    const provider = await Moralis.enableWeb3({
+      connector: getConnectorFromWallet(wallet)
+    })
+    const nft = new ethers.Contract(
+      process.env.NftContract,
+      NFTAbi,
+      provider.getSigner()
+    )
     return await (await nft.mint(uri)).wait()
   } catch (e) {
     // eslint-disable-next-line no-console
@@ -81,7 +92,9 @@ export const mintToken = async (uri) => {
 }
 
 function fromDecimalToHex (number) {
-  if (typeof number !== 'number') { throw new TypeError('The input provided should be a number') }
+  if (typeof number !== 'number') {
+    throw new TypeError('The input provided should be a number')
+  }
   return `0x${number.toString(16)}`
 }
 
@@ -102,7 +115,9 @@ class NoWalletError extends Error {
 }
 
 function verifyChainId (chainId) {
-  if (typeof chainId === 'number') { chainId = fromDecimalToHex(chainId) }
+  if (typeof chainId === 'number') {
+    chainId = fromDecimalToHex(chainId)
+  }
   return chainId
 }
 
@@ -122,11 +137,15 @@ class MetamaskConnector extends Moralis.AbstractWeb3Connector {
     // edge case if MM and CBW are both installed
     if (window.ethereum.providers?.length) {
       window.ethereum.providers.forEach((p) => {
-        if (p.isMetaMask) { provider = p }
+        if (p.isMetaMask) {
+          provider = p
+        }
       })
     }
 
-    if (!provider.isMetaMask) { throw new NoWalletError('Metamask') }
+    if (!provider.isMetaMask) {
+      throw new NoWalletError('Metamask')
+    }
 
     const [accounts, chainId] = await Promise.all([
       provider.request({
@@ -151,7 +170,9 @@ class MetamaskConnector extends Moralis.AbstractWeb3Connector {
     chainId = verifyChainId(chainId)
 
     const currentNetwork = this.chainId
-    if (currentNetwork === chainId) { return }
+    if (currentNetwork === chainId) {
+      return
+    }
 
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
@@ -159,7 +180,14 @@ class MetamaskConnector extends Moralis.AbstractWeb3Connector {
     })
   }
 
-  async addNetwork (chainId, chainName, currencyName, currencySymbol, rpcUrl, blockExplorerUrl) {
+  async addNetwork (
+    chainId,
+    chainName,
+    currencyName,
+    currencySymbol,
+    rpcUrl,
+    blockExplorerUrl
+  ) {
     this.verifyEthereumBrowser()
 
     const newchainId = verifyChainId(chainId)
@@ -198,11 +226,15 @@ class CoinBaseConnector extends Moralis.AbstractWeb3Connector {
     // edge case if MM and CBW are both installed
     if (window.ethereum.providers?.length) {
       window.ethereum.providers.forEach((p) => {
-        if (p.isCoinbaseWallet) { provider = p }
+        if (p.isCoinbaseWallet) {
+          provider = p
+        }
       })
     }
 
-    if (!provider.isCoinbaseWallet) { throw new NoWalletError('CoinBase') }
+    if (!provider.isCoinbaseWallet) {
+      throw new NoWalletError('CoinBase')
+    }
 
     const [accounts, chainId] = await Promise.all([
       provider.request({
@@ -227,7 +259,9 @@ class CoinBaseConnector extends Moralis.AbstractWeb3Connector {
     chainId = verifyChainId(chainId)
 
     const currentNetwork = this.chainId
-    if (currentNetwork === chainId) { return }
+    if (currentNetwork === chainId) {
+      return
+    }
 
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
@@ -235,7 +269,14 @@ class CoinBaseConnector extends Moralis.AbstractWeb3Connector {
     })
   }
 
-  async addNetwork (chainId, chainName, currencyName, currencySymbol, rpcUrl, blockExplorerUrl) {
+  async addNetwork (
+    chainId,
+    chainName,
+    currencyName,
+    currencySymbol,
+    rpcUrl,
+    blockExplorerUrl
+  ) {
     this.verifyEthereumBrowser()
 
     const newchainId = verifyChainId(chainId)
@@ -260,8 +301,10 @@ class CoinBaseConnector extends Moralis.AbstractWeb3Connector {
 
 export const getConnectorFromWallet = (wallet) => {
   switch (wallet) {
-    case 'metamask': return MetamaskConnector
-    case 'coinbase': return CoinBaseConnector
+    case 'metamask':
+      return MetamaskConnector
+    case 'coinbase':
+      return CoinBaseConnector
   }
 }
 
