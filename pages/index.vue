@@ -1,20 +1,20 @@
 <template>
   <CBox id="artworkarch-container" v-bind="mainStyles[colorMode]">
-    <CBox v-bind="mainStyles[colorMode]" font-size="5xl" font-weight="bold">
+    <NavBar :is-transparent="true" />
+    <CBox v-bind="mainStyles[colorMode]" style="margin-top:-8rem" font-size="5xl" font-weight="bold">
       <ArtworkGrid />
       <CBox
+        v-if="showintrocard"
         id="introcard"
         class="transparent"
         border="1px"
         border-color="gray.300"
         shadow="md"
-        z-index="base"
         v-bind="mainStyles[colorMode]"
         mr="5"
         col-span="2"
         bg="gray.300"
         border-radius="1rem"
-        align-items="center"
         p="5"
       >
         <CLink as="router-link" to="/" d="flex" mb="5" align-items="center">
@@ -48,7 +48,14 @@
           platform itself are constantly curated for external projects and
           campaigns.
         </CText>
-        <CButton text-transform="uppercase" font-weight="medium" border="1px" size="lg" border-radius="2rem">
+        <CButton
+          text-transform="uppercase"
+          font-weight="medium"
+          border="1px"
+          size="lg"
+          border-radius="2rem"
+          @click="showintrocard = false"
+        >
           Explore now
         </CButton>
       </CBox>
@@ -61,6 +68,8 @@
 import {
   CBox
 } from '@chakra-ui/vue'
+import NavBar from '@/components/Navigation/NavBar.vue'
+
 import ArtworkGrid from '~/components/ArtworkGrid.vue'
 // import ArtworkArch from '~/components/ArtworkArch.vue'
 
@@ -68,12 +77,15 @@ export default {
   name: 'App',
   components: {
     CBox,
+    NavBar,
     // ArtworkArch,
     ArtworkGrid
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
+  layout: 'index',
   data () {
     return {
+      showintrocard: true,
       showModal: false,
       mainStyles: {
         dark: {
@@ -105,9 +117,9 @@ export default {
 
 <style>
 #introcard {
-  max-width: 20vw;
-  margin-top: 20vh;
+  max-width: 40vw;
   position: absolute;
+  margin-top: 10rem;
   top: 0;
   right: 0
 }

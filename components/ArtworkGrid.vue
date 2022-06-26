@@ -62,7 +62,15 @@ export default {
 
 <style>
 #griditem {
-  opacity: 0.4;
+  opacity: 0.2;
+  transition: transform .2s; /* Animation */
+
+}
+
+#griditem:hover {
+  opacity: 1;
+  transform: scale(1.4); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+
 }
 
 /* #artworkgrid{
@@ -108,9 +116,4 @@ export default {
     transform: translateX(-50%);
   }
 }
-
-.griditem:hover {
-  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-}
-
 </style>

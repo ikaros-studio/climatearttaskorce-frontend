@@ -6,6 +6,7 @@
           id="main-grid"
           font-family="body"
           as="main"
+          bg="main"
         >
           <CReset />
           <CAlert

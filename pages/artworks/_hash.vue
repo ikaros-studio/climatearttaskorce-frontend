@@ -51,7 +51,7 @@
               ✅ In your collection
             </CButton>
             <CButton v-else size="sm" variant-color="gray">
-              + Add to collection
+              🖐️ Request artwork
             </CButton>
           </CStack>
         </CStack>
