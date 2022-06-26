@@ -35,12 +35,27 @@
 
         <CBox p="6">
           <CBox d="flex" align-items="baseline">
-            <CTag font-weigt="light" font-size="xs" px="5px" py="2px" rounded="lg">
-              <span v-if="artwork.artist_name">{{ artwork.artist_name }}</span>
-              <span v-else>Unknown artist</span>
-            </CTag>
+            <CBox align-items="center">
+              <CText v-if="!artwork.artistarr" font-size="sm" mr="1" font-weight="light">
+                Artist(s): <CTag variant-color="catpink" size="sm" bg="gray.500" mr="1">
+                  {{ artwork.artist_name }}
+                </CTag>
+              </CText>
+              <CText v-else>
+                Artist(s): <CTag
+                  v-for="artist, index in artwork.artists"
+                  :key="index"
+                  variant-color="catpink"
+                  size="sm"
+                  bg="gray.500"
+                  mr="1"
+                >
+                  {{ artist }}
+                </CTag>
+              </CText>
+            </CBox>
           </CBox>
-          <CFlex mt="1" justify-content="space-between" align-items="center">
+          <CFlex mt="2" justify-content="space-between" align-items="center">
             <CBox
               font-size="2xl"
               font-weight="semibold"
@@ -53,13 +68,8 @@
             <CButton
               as="router-link"
               :to="'/artworks/' + artwork.hash"
-              variant-color="catblue"
               rounded="full"
               size="sm"
-              border="1px"
-              color="white"
-              border-color="white"
-              bg="transparent"
             >
               View
             </CButton>

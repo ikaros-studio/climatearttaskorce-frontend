@@ -6,9 +6,17 @@
           id="main-grid"
           font-family="body"
           as="main"
-          bg="transparent"
         >
           <CReset />
+          <CAlert
+            px="5"
+            font-size="xs"
+            justify-content="center"
+            bg="gray.300"
+            z-index="modal"
+          >
+            ⚙️ The climate art taskforce platform is currently in beta and still under development.
+          </CAlert>
           <NavBar z-index="dropdown" />
           <Nuxt id="container" />
           <!-- <CFlex id="bodycontainer" w="100%">
@@ -31,7 +39,8 @@ import {
   CThemeProvider,
   CColorModeProvider,
   CReset,
-  CBox
+  CBox,
+  CAlert
 
 } from '@chakra-ui/vue'
 import NavBar from '@/components/Navigation/NavBar.vue'
@@ -45,7 +54,8 @@ export default {
     CReset,
     CBox,
     NavBar,
-    Footer
+    Footer,
+    CAlert
   },
   data () {
     return {

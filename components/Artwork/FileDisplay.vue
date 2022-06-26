@@ -1,7 +1,5 @@
 <template>
   <CBox
-    class="transparent-card"
-    rounded="1rem"
     w="100%"
     h="100%"
   >
@@ -9,7 +7,6 @@
       v-if="type === 'image' || (type === 'video')"
       :src="link"
       rounded="1rem"
-      border-bottom="1px"
       h="80vh"
       w="100%"
       object-fit="contain"
@@ -22,7 +19,6 @@
       h="80vh"
       rounded="1rem"
       w="100%"
-      border-bottom="1px"
       scrolling="no"
       :src="link"
     />

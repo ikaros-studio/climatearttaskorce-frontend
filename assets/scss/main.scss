@@ -1,63 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500&family=Work+Sans:ital,wght@1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@1,800&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500&family=Work+Sans:ital,wght@1,700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@1,800&display=swap');
 
-.catfont {
-    font-family: 'Work Sans' !important;
-}
+// .catfont {
+//     font-family: 'Work Sans' !important;
+// }
 
-.plexsans {
-    font-family: 'IBM Plex Sans', sans-serif !important;
-}
-
-.z-100 {
-    z-index: 1000 !important;
-}
+// .plexsans {
+//     font-family: 'IBM Plex Sans', sans-serif !important;
+// }
 
 .transparent-card {
-    background-color: rgba(255, 255, 255, .35) !important;
-    border: 1px solid rgba(255, 255, 255, .25) !important;
+    background-color: rgba(255, 255, 255, .25) !important;
+    // border: 1px solid rgba(255, 255, 255, .25) !important;
     // box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25) !important;
-    backdrop-filter: blur(15px) !important;
+    // backdrop-filter: blur(5px) !important;
 }
 
-body,
-button {
-    font-family: 'IBM Plex Sans' !important;
+.transparent {
+    background-color: rgba(255, 255, 255, .25) !important;
+    backdrop-filter: blur(10px) !important;
 }
 
-body {
-    margin: 0px !important
-}
+// body,
+// button {
+//     font-family: 'IBM Plex Sans' !important;
+// }
 
-a {
-    font-family: 'IBM Plex Sans' !important;
-    color: '#FF449F' !important
-}
+// a {
+//     font-family: 'IBM Plex Sans' !important;
+//     color: '#FF449F' !important
+// }
 
-.bg-continents {
-    background-image: url('~/static/img/bg-continents.svg');
-    background-position: center;
-    margin: 0px !important;
-}
+// .bg-gradient {
+//     background: linear-gradient(-65deg, #005F99, #00EAD3, #005F99, #005F99);
+//     background-size: 400% 400%;
+//     animation: gradient 100s ease infinite;
+//     height: 100vh;
 
-.bg-gradient {
-    background: linear-gradient(-65deg, #005F99, #00EAD3, #005F99, #005F99);
-    background-size: 400% 400%;
-    animation: gradient 100s ease infinite;
-    height: 100vh;
+// }
 
-}
+// @keyframes gradient {
+//     0% {
+//         background-position: 0% 50%;
+//     }
 
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
+//     50% {
+//         background-position: 100% 50%;
+//     }
 
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
+//     100% {
+//         background-position: 0% 50%;
+//     }
+// }

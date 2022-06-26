@@ -2,17 +2,18 @@
   <CBox
     v-bind="mainStyles[colorMode]"
     z-index="docked"
+    position="relative"
     p="5"
     w="100%"
   >
     <CBox
       w="100%"
       border-radius="1rem"
-      shadow="lg"
-      class="transparent-card"
+      shadow="sm"
       v-bind="mainStyles[colorMode]"
-      border-bottom="1px"
-      border-bottom-color="gray.200"
+      border="1px"
+      class="transparent-card"
+      border-color="gray.300"
       px="4"
       d="flex"
       h="16"
@@ -49,18 +50,19 @@
           direction="row"
           spacing="4"
         >
-          <c-pseudo-box
-            v-for="el, index in publicmenu"
-            :key="index"
-            as="router-link"
-            :to="el.to"
-            font-size="sm"
-            mr="5"
-            font-weight="light"
-            :_hover="{ bg: 'rgba(255,255,255,0.2)', py:1,px:2, border:'1px', borderColor:'white', borderRadius:'1rem'}"
-          >
-            {{ el.name }}
-          </c-pseudo-box>
+          <CBox :_hover="{ bg: 'rgba(255,255,255,0.2)', borderRadius:'1rem'}" p="2">
+            <c-pseudo-box
+              v-for="el, index in publicmenu"
+              :key="index"
+              as="router-link"
+              :to="el.to"
+              font-size="sm"
+              mr="5"
+              font-weight="light"
+            >
+              {{ el.name }}
+            </c-pseudo-box>
+          </CBox>
         </CStack>
       </CFlex>
 
@@ -148,7 +150,7 @@
             >
               <CIcon name="user" />
             </CMenuButton>
-            <CMenuList z-index="modal">
+            <CMenuList mr="5" font-size="sm" z-index="tooltip">
               <CMenuItem as="router-link" to="/collection" py="2">
                 <CIcon
                   mr="2"

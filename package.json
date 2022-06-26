@@ -32,7 +32,8 @@
     "three": "^0.140.2",
     "topojson": "^3.0.2",
     "topojson-client": "^3.1.0",
-    "vue-append": "^2.2.0"
+    "vue-append": "^2.2.0",
+    "vue-masonry-css": "^1.0.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",

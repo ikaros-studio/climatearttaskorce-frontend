@@ -1,68 +1,59 @@
 <template>
   <CBox v-bind="mainStyles[colorMode]">
     <CGrid v-bind="mainStyles[colorMode]" px="5" template-columns="repeat(6, 1fr)" gap="6">
-      <CGridItem
-        col-span="4"
-      >
+      <CGridItem col-span="4">
         <CLink as="router-link" to="/" font-size="">
           ← Back to artworks
         </CLink>
-        <CBox
-          mt="5"
-          border-radius="1rem"
-          w="100%"
-        >
+        <CBox border="1px" border-color="gray.300" mt="5" border-radius="1rem">
           <FileDisplay :type="artwork.file_type" :link="artwork.link" />
         </CBox>
       </CGridItem>
-      <CGridItem
-        float="bottom"
-        col-span="2"
-        w="100%"
-        d="flex"
-        align-items="center"
-      >
+      <CGridItem float="bottom" col-span="2" w="100%" d="flex" align-items="center">
         <CStack spacing="4">
-          <CText w="100%" font-size="2xl">
+          <CText w="100%" font-weight="bold" font-size="2xl">
             {{ artwork.name }}
           </CText>
-          <CFlex align-items="center">
-            <CText font-size="sm" mr="1" font-weight="light">
-              Artist(s): {{ artwork.artist_name }}
+          <CBox align-items="center">
+            <CText v-if="!artwork.artistarr" font-size="sm" mr="1" font-weight="light">
+              Artist(s): <CTag variant-color="catpink" size="sm" bg="gray.500" mr="1">
+                {{ artwork.artist_name }}
+              </CTag>
             </CText>
-            <CTag
-              v-for="artist, index in artwork.artists"
-              :key="index"
-              variant-color="catpink"
-              size="sm"
-              bg="gray.500"
-              mr="1"
-            >
-              {{ artist }}
-            </CTag>
-          </CFlex>
-          <CText font-size="sm" mr="1" font-weight="light">
+            <CText v-else>
+              Artist(s): <CTag
+                v-for="artist, index in artwork.artists"
+                :key="index"
+                variant-color="catpink"
+                size="sm"
+                bg="gray.500"
+                mr="1"
+              >
+                {{ artist }}
+              </CTag>
+            </CText>
+          </CBox>
+          <CText v-if="artwork.material" font-size="sm" mr="1" font-weight="light">
             {{ artwork.material }}
           </CText>
           <CText mb="5" font-size="xs" font-weight="200">
-            {{ artwork.description }}
+            <span v-if="artworks.description">{{ artwork.description }}</span>
+            <span v-else>No description available</span>
           </CText>
           <CText font-size="xs">
             <CLink>
-              Artist Instagram
-            </CLink> | <CLink>Artist Website</CLink>
+              Artist Instagram 🔗
+            </CLink> | <CLink>Artist Website 🔗</CLink>
           </CText>
 
-          <CStack
-            direction="row"
-            spacing="1"
-          >
-            <CButton size="sm" variant-color="gray">
+          <CStack direction="row" spacing="1">
+            <CButton disabled v-if="artworks.find(el => el.hash === artwork.hash)" size="sm">
+              ✅ In your collection
+            </CButton>
+            <CButton v-else size="sm" variant-color="gray">
               + Add to collection
             </CButton>
-            <CButton size="sm">
-              Request artwork
-            </CButton>
+
           </CStack>
         </CStack>
       </CGridItem>
@@ -77,11 +68,11 @@ import {
   CGrid,
   CGridItem,
   CStack,
-  CFlex,
   CLink
 } from '@chakra-ui/vue'
+import { getNFTsForCurrentUser, getNFTMetadataFromHash } from '~/common/object'
+
 import FileDisplay from '@/components/Artwork/FileDisplay'
-import { getNFTMetadataFromHash } from '~/common/object'
 // // import { getNFTsForCurrentUser } from '~/common/object'
 
 export default {
@@ -91,7 +82,6 @@ export default {
     CGrid,
     CGridItem,
     CStack,
-    CFlex,
     CLink,
     FileDisplay
   },
@@ -121,6 +111,9 @@ export default {
       }
     }
   },
+  async fetch () {
+    this.artworks = await getNFTsForCurrentUser()
+  },
   computed: {
     colorMode () {
       return this.$chakraColorMode()
@@ -131,7 +124,6 @@ export default {
 
 <style>
 .rounded {
-  border-radius:0.25rem
+  border-radius: 0.25rem
 }
-
 </style>

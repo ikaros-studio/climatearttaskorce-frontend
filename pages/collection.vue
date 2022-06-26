@@ -1,45 +1,20 @@
 <template>
-  <CBox
-    v-bind="
-      mainStyles[colorMode]"
-    min-h="100vh"
-    class="bg-continents"
-  >
-    <CBox
-      w="100%"
-      px="5"
-      d="flex"
-      justify-content="space-between"
-      align-items="center"
-    >
+  <CBox v-bind="mainStyles[colorMode]" min-h="100vh">
+    <CBox w="100%" px="5" d="flex" justify-content="space-between" align-items="center">
       <CText font-weight="bold" font-size="2xl">
         Your collection
       </CText>
       <UploadArtwork v-if="artworks.length > 0" :cta="'Upload another artwork'" @onupload="$fetch" />
     </CBox>
-    <CBox
-      v-if="(artworks.length < 1) && !$fetchState.pending"
-      p="5"
-      h="100%"
-      w="100%"
-    >
-      <CAlert
-        font-size="sm"
-        border-radius="1rem"
-        status="info"
-        mb="5"
-      >
+    <CBox v-if="(artworks.length < 1) && !$fetchState.pending" p="5" h="100%" w="100%">
+      <CAlert font-size="sm" border-radius="1rem" status="info" mb="5">
         <CAlertIcon />
         You don't have any artworks in your collection yet. Create one or explore existing ones.
       </CAlert>
       <UploadArtwork w="100%" :cta="'Upload your first artwork'" />
     </CBox>
     <c-simple-grid p="5" :columns="4" :spacing="5">
-      <DisplayThumbnail
-        v-for="artwork, index in artworks"
-        :key="index"
-        :artwork="artwork"
-      />
+      <DisplayThumbnail v-for="artwork, index in artworks" :key="index" :artwork="artwork" />
       <!-- <CPseudoBox
         v-for="artwork, index in artworks"
         :key="index"

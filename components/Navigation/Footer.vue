@@ -11,9 +11,9 @@
       border-radius="1rem"
       class="transparent-card"
       v-bind="mainStyles[colorMode]"
-      shadow="lg"
-      border-bottom="1px"
-      border-bottom-color="gray.200"
+      shadow="sm"
+      border="1px"
+      border-color="gray.300"
       px="4"
     >
       <CFlex />

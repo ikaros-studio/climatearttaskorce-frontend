@@ -1,19 +1,17 @@
 <template>
-  <CBox id="artworkgrid" class="marquee">
-    <CBox class="track">
+  <CBox id="artworkgrid" overflow="hidden" min-h="100vh" class="marquee">
+    <masonry :cols="20" :gutter="0">
       <CLink
-        v-for="artwork, index in artworks.slice(0).slice(0)"
+        v-for="(item, index) in griddata.slice()"
+        id="griditem"
         :key="index"
-        class=""
-        font-weight="light"
-        font-size="xs"
-        mr="1"
         as="router-link"
-        :to="'/artworks/' + artwork.hash"
+        :to="'/artworks/' + item.hash"
+        bg="gray.300"
       >
-        {{ artwork.name }}
+        <img :src="item.link">
       </CLink>
-    </CBox>
+    </masonry>
   </CBox>
 </template>
 
@@ -23,7 +21,11 @@ import {
 
 } from '@chakra-ui/vue'
 
+import Vue from 'vue'
+import VueMasonry from 'vue-masonry-css'
 import { getAllNFTs } from '~/common/object'
+
+Vue.use(VueMasonry)
 
 export default {
   components: {
@@ -31,12 +33,24 @@ export default {
   },
   data () {
     return {
-      artworks: []
+      griddata: []
     }
   },
   async fetch () {
     const artworks = await getAllNFTs()
-    this.artworks = artworks
+
+    const griddata = []
+    const count = 1000
+
+    if (griddata.length < count) {
+      const repeat = count / artworks.length
+      // console.log(repeat)
+      for (let i = 0; i < repeat; i++) {
+        artworks.forEach((el) => { griddata.push(el) })
+      }
+    }
+
+    this.griddata = griddata
   },
   methods: {
 
@@ -47,16 +61,29 @@ export default {
 </script>
 
 <style>
-
-#artworkgrid {
-    position: absolute !important;
-    width: 100vw !important;
-    overflow: auto !important;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+#griditem {
+  opacity: 0.4;
 }
+
+/* #artworkgrid{
+   -webkit-animation-name: move;
+   -webkit-animation-duration: 100s;
+   -webkit-animation-iteration-count: infinite;
+   -webkit-animation-direction: up;
+   -webkit-animation-timing-function:linear;
+}
+
+@-webkit-keyframes move {
+   0% {
+      transform:translateY(0);
+   }
+   100% {
+      transform:translateY(-100%);
+   }
+} */
+
 .img-thumbnail {
-    max-width: 300px;
+  max-width: 300px;
 }
 
 .marquee {
@@ -73,8 +100,17 @@ export default {
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.griditem:hover {
+  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 </style>
