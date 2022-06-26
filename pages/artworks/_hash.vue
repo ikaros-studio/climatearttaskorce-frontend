@@ -47,13 +47,12 @@
           </CText>
 
           <CStack direction="row" spacing="1">
-            <CButton disabled v-if="artworks.find(el => el.hash === artwork.hash)" size="sm">
+            <CButton v-if="artworks.find(el => el.hash === artwork.hash)" disabled size="sm">
               ✅ In your collection
             </CButton>
             <CButton v-else size="sm" variant-color="gray">
               + Add to collection
             </CButton>
-
           </CStack>
         </CStack>
       </CGridItem>
